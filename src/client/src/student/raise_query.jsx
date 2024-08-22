@@ -86,7 +86,7 @@ const QueryForm = () => {
     });
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/student/queries/create",
+        "https://acadbackend-sudarshan50s-projects.vercel.app/api/student/queries/create",
         formData,
         {
           headers: {
@@ -122,7 +122,7 @@ const QueryForm = () => {
 
     // console.log(data);
 
-    // fetch('http://localhost:3001/api/student/queries/create', {
+    // fetch('https://acadbackend-sudarshan50s-projects.vercel.app/api/student/queries/create', {
     //     method: 'POST',
     //     headers: {
     //         'Content-Type': 'application/json',

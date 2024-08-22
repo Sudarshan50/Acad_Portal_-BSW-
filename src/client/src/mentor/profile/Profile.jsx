@@ -42,7 +42,7 @@ const Profile = ({ isMod }) => {
     // };
     try {
       const info = await axios.get(
-        `http://localhost:3001/api/mentor/auth/details/${Cookies.get(
+        `https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/auth/details/${Cookies.get(
           "kerberos"
         )}`
       );
@@ -110,7 +110,7 @@ const Profile = ({ isMod }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/mentor/auth/change-password",
+        "https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/auth/change-password",
         {
           kerberos: Cookies.get("kerberos"),
           oldPassword: key.oldpassword,
