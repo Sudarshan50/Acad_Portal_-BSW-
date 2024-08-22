@@ -1,6 +1,6 @@
 import e from "express";
 import bcrypt from "bcryptjs";
-import Moderator from "../../models/moderator.js";
+import Moderator from "../../models/moderator.mjs";
 
 const router = e.Router();
 

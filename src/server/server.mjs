@@ -19,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 //db connection....
+
 try {
   await mongoose.connect(process.env.DB_URI);
   console.log("Connected to MongoDB");
@@ -26,7 +27,7 @@ try {
   console.log(er);
 }
 
-import endpoints from "./endpoints/index.js";
+import endpoints from "./endpoints/index.mjs";
 app.use("/api", endpoints);
 
 app.listen(PORT, () => {

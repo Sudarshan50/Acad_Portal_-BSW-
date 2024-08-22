@@ -1,7 +1,7 @@
 import express from "express";
-import Mentor from "../../models/mentor.js";
+import Mentor from "../../models/mentor.mjs";
 import multer from "multer";
-import Attendance from "../../models/attendance.js";
+import Attendance from "../../models/attendance.mjs";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";

@@ -1,6 +1,6 @@
 import express from 'express';
-import Mentor from '../../models/mentor.js';
-import Opportunity from '../../models/opportunity.js';
+import Mentor from '../../models/mentor.mjs';
+import Opportunity from '../../models/opportunity.mjs';
 
 const router=express.Router();
 

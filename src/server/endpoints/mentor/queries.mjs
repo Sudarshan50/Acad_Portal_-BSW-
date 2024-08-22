@@ -1,6 +1,6 @@
 import express from 'express';
-import Mentor from '../../models/mentor.js';
-import Query from '../../models/query.js';
+import Mentor from '../../models/mentor.mjs';
+import Query from '../../models/query.mjs';
 
 const queries_router=express.Router();
 

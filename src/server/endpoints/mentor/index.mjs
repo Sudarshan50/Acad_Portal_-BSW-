@@ -1,12 +1,12 @@
 import express from 'express';
 
 const mentor_router = express.Router();
-import auth_router from './auth.js';
+import auth_router from './auth.mjs';
 mentor_router.use('/auth', auth_router);
-import queries_router from './queries.js';
+import queries_router from './queries.mjs';
 mentor_router.use('/queries', queries_router);
-import opportunity_router from './opportunity.js';
+import opportunity_router from './opportunity.mjs';
 mentor_router.use('/opportunity', opportunity_router);
-import attendance_router from './attendance.js';
+import attendance_router from './attendance.mjs';
 mentor_router.use('/attendance', attendance_router);
 export default mentor_router;

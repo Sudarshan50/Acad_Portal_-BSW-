@@ -1,6 +1,6 @@
 import express from "express";
-import Moderator from "../../models/moderator.js";
-import Attendance from "../../models/attendance.js";
+import Moderator from "../../models/moderator.mjs";
+import Attendance from "../../models/attendance.mjs";
 
 const router = express.Router();
 

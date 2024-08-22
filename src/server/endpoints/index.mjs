@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import express from "express";
-import Student from "../models/student.js";
-import Token from "../models/token.js";
+import Student from "../models/student.mjs";
+import Token from "../models/token.mjs";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 
@@ -116,14 +116,14 @@ router.get("/verify/:token", async (req, res) => {
 //   });
 // })
 
-import student_router from "./students/index.js";
+import student_router from "./students/index.mjs";
 router.use("/student", student_router);
 
-import mentor_router from "./mentor/index.js";
+import mentor_router from "./mentor/index.mjs";
 router.use("/mentor", mentor_router);
 
-import moderator_router from "./moderator/index.js";
-import verifEmail from "./oauth/emailverif.js";
+import moderator_router from "./moderator/index.mjs";
+import verifEmail from "./email_verif/emailverif.mjs";
 router.use("/moderator", moderator_router);
 
 export default router;

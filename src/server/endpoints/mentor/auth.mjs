@@ -1,5 +1,5 @@
 import e from "express";
-import Mentor from "../../models/mentor.js";
+import Mentor from "../../models/mentor.mjs";
 import bcrypt from 'bcryptjs';
 
 const router = e.Router();

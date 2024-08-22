@@ -1,9 +1,9 @@
 import express from "express";
-import Query from "../../models/query.js";
+import Query from "../../models/query.mjs";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import Student from "../../models/student.js";
+import Student from "../../models/student.mjs";
 import { ObjectId } from "mongodb";
 import { fileURLToPath } from "url";
 import { dirname } from "path";

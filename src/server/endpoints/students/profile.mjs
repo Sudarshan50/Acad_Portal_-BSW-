@@ -1,5 +1,5 @@
 import express from "express";
-import Student from "../../models/student.js";
+import Student from "../../models/student.mjs";
 import bcrypt from "bcryptjs";
 
 const profile_router = express.Router();
