@@ -15,9 +15,6 @@ const __dirname = path.dirname(__filename);
 
 // Create the uploads directory if it doesn't exist
 const uploadDir = path.join(__dirname, "../../public/uploads/attendance");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {

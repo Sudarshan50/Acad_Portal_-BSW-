@@ -17,9 +17,6 @@ const __dirname = path.dirname(__filename);
 
 // Create the uploads directory if it doesn't exist
 const uploadDir = path.join(__dirname, "../../public/uploads/queries");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
 
 // Multer configuration
 const storage = multer.diskStorage({
