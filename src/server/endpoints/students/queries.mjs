@@ -8,60 +8,55 @@ import { ObjectId } from "mongodb";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { v4 as uuidv4 } from "uuid";
+import { v2 as cloudinary } from "cloudinary";
+import e from "express";
 
 const queries_router = express.Router();
 
-//multer setup....
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+queries_router.post("/create", async (req, res) => {
+  try {
+    const { kerberos, type, description } = req.fields;
+    const uploadedFiles = req.files.attachments;
 
-// Create the uploads directory if it doesn't exist
-const uploadDir = path.join(__dirname, "../../public/uploads/queries");
+    const student = await Student.findOne({ kerberos });
+    if (!student) {
+      return res.status(400).send("Student not found");
+    }
 
-// Multer configuration
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir); // Set the upload directory
-  },
-  filename: function (req, file, cb) {
-    const uniqueId = uuidv4(); // Generate a UUID
-    const extension = path.extname(file.originalname); // Extract the original file extension
-    const newFilename = `${uniqueId}${extension}`; // Create the new filename
-    cb(null, newFilename); // Save the file with the new filename
-  },
-});
+    const fileUploads = [];
+    const filesArray = Array.isArray(uploadedFiles)
+      ? uploadedFiles
+      : [uploadedFiles];
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
-});
+    for (const file of filesArray) {
+      const filePath = file.path; // Use `path` provided by express-formidable
 
-queries_router.post(
-  "/create",
-  upload.array("attachments", 5),
-  async (req, res) => {
-    console.log(req.body);
-    try {
-      const student = await Student.findOne({ kerberos: req.body.kerberos });
-      if (!student) {
-        return res.status(400).send("Student not found");
-      }
-      // just store to the file name....
-      const filePaths = req.files.map((file) => file.filename);
-      const query = new Query({
-        student: student._id,
-        type: req.body.type,
-        description: req.body.description,
-        attachments: filePaths,
+      // Upload to Cloudinary
+      const uploadPromise = cloudinary.uploader.upload(filePath, {
+        public_id: `${uuidv4()}`,
+        folder: "queries",
       });
 
-      await query.save();
-      res.status(201).send(query);
-    } catch (e) {
-      res.status(500).send(e);
+      fileUploads.push(uploadPromise);
     }
+
+    const uploadResults = await Promise.all(fileUploads);
+    const fileUrls = uploadResults.map((result) => result.secure_url);
+
+    const query = new Query({
+      student: student._id,
+      type,
+      description,
+      attachments: fileUrls,
+    });
+
+    await query.save();
+    res.status(201).send(query);
+  } catch (e) {
+    console.error("Error during file upload and save:", e);
+    res.status(500).send("Internal server error");
   }
-);
+});
 
 //GET: /student/queries?qid=&kerberos= - query of a student
 queries_router.get("/one", async (req, res) => {
@@ -151,44 +146,60 @@ queries_router.patch("/resolve/:id", async (req, res) => {
 });
 
 //UPDATE: /student/queries/update/:id - Update a query
-queries_router.patch(
-  "/update/:id",
-  upload.array("attachments", 5),
-  async (req, res) => {
-    try {
-      console.log(req.body);
-      const student = await Student.findOne({ kerberos: req.body.kerberos });
-      if (!student) {
-        res.status(400).send("Student not found");
-        return;
-      }
-      const query = await Query.findOne({
-        _id: req.params.id,
-        student: student._id,
-        status: "QUEUED",
-      });
-      console.log(query);
-      if (!query) {
-        res.status(400).send("Query not found");
-        return;
-      }
-      if (req.body.type) {
-        query.type = req.body.type;
-      }
-      if (req.body.description) {
-        query.description = req.body.description;
-      }
-      if (req.files) {
-        const filePaths = req.files.map((file) => file.filename);
-        query.attachments = filePaths;
-      }
-      await query.save();
-      res.status(200).send(query);
-    } catch (e) {
-      res.status(500).send(e);
+queries_router.patch("/update/:id", async (req, res) => {
+  try {
+    const student = await Student.findOne({ kerberos: req.fields.kerberos });
+    if (!student) {
+      res.status(400).send("Student not found");
+      return;
     }
+    const query = await Query.findOne({
+      _id: req.params.id,
+      student: student._id,
+      status: "QUEUED",
+    });
+    // console.log(query);
+    if (!query) {
+      res.status(400).send("Query not found");
+      return;
+    }
+    if (req.fields.type) {
+      query.type = req.fields.type;
+    }
+    if (req.fields.description) {
+      query.description = req.fields.description;
+    }
+    if (req.files.attachments) {
+      const uploadedFiles = req.files.attachments;
+      for (const attachment of query.attachments) {
+        const publicId = attachment.split("/").slice(-1)[0].split(".")[0];
+        console.log(publicId);
+        const del = await cloudinary.uploader.destroy(`queries/${publicId}`);
+        console.log(del);
+      }
+      const fileUploads = [];
+      const filesArray = Array.isArray(uploadedFiles)
+        ? uploadedFiles
+        : [uploadedFiles];
+      for (const file of filesArray) {
+        const filePath = file.path;
+        const uploadPromise = cloudinary.uploader.upload(filePath, {
+          public_id: `${uuidv4()}`,
+          folder: "queries",
+        });
+
+        fileUploads.push(uploadPromise);
+      }
+      const uploadResults = await Promise.all(fileUploads);
+      const fileUrls = uploadResults.map((result) => result.secure_url);
+      query.attachments = fileUrls;
+    }
+    await query.save();
+    res.status(200).send(query);
+  } catch (e) {
+    res.status(500).send(e);
   }
-);
+});
 
 //DELETE: /student/queries/delete/:id - Delete a query
 queries_router.delete("/delete/:id", async (req, res) => {

@@ -102,48 +102,6 @@ const QueryForm = () => {
     } catch (err) {
       console.log(err);
     }
-
-    // const files = Array.from(attachments);
-    // const base64Files = await Promise.all(files.map(file => {
-    //     return new Promise((resolve, reject) => {
-    //         const reader = new FileReader();
-    //         reader.onloadend = () => resolve(reader.result);
-    //         reader.onerror = reject;
-    //         reader.readAsDataURL(file);
-    //     });
-    // }));
-
-    // const data = {
-    //     kerberos: Cookies.get('kerberos'),
-    //     type: type,
-    //     description: description,
-    //     attachments: base64Files,
-    // };
-
-    // console.log(data);
-
-    // fetch('https://acadbackend-sudarshan50s-projects.vercel.app/api/student/queries/create', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'x-access-token': Cookies.get('token'),
-    //     },
-    //     body: JSON.stringify(data),
-    // })
-    // .then(response => {
-    //     if (response.status === 401|| response.status === 403) {
-    //         alert('Unauthorized');
-    //         nav('../../')
-    //     } else {
-    //         return response.json();
-    //     }
-    // }
-    // ).then(data => {console.log(data);alert('Your query has been submitted successfully.');
-
-    // nav('../')})
-    // .catch((error) => {
-    //     {console.error('Error:', error);alert('Attachment too large');}
-    // });
   };
 
   return (
