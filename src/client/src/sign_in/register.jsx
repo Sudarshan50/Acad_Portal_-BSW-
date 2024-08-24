@@ -57,7 +57,7 @@ export default function JoyRegisterSideTemplate() {
       phone_number: formElements.phone.value,
     };
     try {
-      const res = await axios.post(`http://localhost:3001/api/signup`, data);
+      const res = await axios.post(`https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/signup`, data);
       if (res.status === 201) {
         navigator("/");
         toast.warn("Please check your webmail to verify your account 📧");
@@ -181,7 +181,7 @@ export default function JoyRegisterSideTemplate() {
                   handleSubmit(event);
                 }}
 
-                // fetch("http://localhost:3001/api/login",{
+                // fetch("https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/login",{
                 //   method: 'POST',
                 //   headers: {
                 //     'Content-Type': 'application/json',

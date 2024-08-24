@@ -29,7 +29,7 @@ const Dashboard = () => {
   const fetechQueries = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:3001/api/moderator/queries"
+        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries"
       );
       if (res.status === 200) {
         setModQueries(res.data);
@@ -59,7 +59,7 @@ const Dashboard = () => {
   const handleApprove = async (id) => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/moderator/queries/make_available/${id}`,
+        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/make_available/${id}`,
         {
           kerberos: Cookies.get("kerberos"),
         }
@@ -77,7 +77,7 @@ const Dashboard = () => {
   const handleReject = async (id) => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/moderator/queries/dismiss/${id}`,
+        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/dismiss/${id}`,
         {
           kerberos: Cookies.get("kerberos"),
         }

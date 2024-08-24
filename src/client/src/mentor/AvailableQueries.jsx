@@ -198,7 +198,7 @@ export default function AvailableQueryList() {
     async function fetchData() {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/mentor/queries",
+          "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/queries",
           {
             headers: {
               "Content-Type": "application/json",
@@ -233,7 +233,7 @@ export default function AvailableQueryList() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/api/mentor/queries/${id}`, {
+      await axios.delete(`https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/queries/${id}`, {
         headers: {
           "Content-Type": "application/json",
           "x-access-token": Cookies.get("token"),

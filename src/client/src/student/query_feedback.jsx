@@ -62,7 +62,7 @@ const QueryFeedback = () => {
             feedback: feedback,
             kerberos: Cookies.get('kerberos')
         }
-        fetch('http://localhost:3001/api/student/queries/resolve/'+qid, {
+        fetch('https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/resolve/'+qid, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
