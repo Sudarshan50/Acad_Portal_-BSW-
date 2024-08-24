@@ -85,7 +85,7 @@ const QueryForm = () => {
     try {
       console.log(id);
       let res = await axios.patch(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/student/queries/update/${id}`,
+        `http://localhost:3001/api/student/queries/update/${id}`,
         formData,
         {
           headers: {
@@ -112,7 +112,7 @@ const QueryForm = () => {
       navigate("/student");
     }
     fetch(
-      "https://acadbackend-sudarshan50s-projects.vercel.app/api/student/queries/queued?qid=" +
+      "http://localhost:3001/api/student/queries/queued?qid=" +
         encodeURIComponent(qid) +
         "&kerberos=" +
         encodeURIComponent(Cookies.get("kerberos")),

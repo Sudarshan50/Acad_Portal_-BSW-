@@ -54,7 +54,7 @@ export default function JoySignInSideTemplate() {
       password: formElements.password.value,
     };
     try {
-      const res = await axios.post("https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/auth/login", data);
+      const res = await axios.post("http://localhost:3001/api/mentor/auth/login", data);
       console.log(res);
       if(res.status === 200)
       {
@@ -176,7 +176,7 @@ export default function JoySignInSideTemplate() {
                 //     kerberos: formElements.kerberos.value,
                 //     password: formElements.password.value,
                 //   };
-                //   fetch("https://acadbackend-sudarshan50s-projects.vercel.app/api/login",{
+                //   fetch("http://localhost:3001/api/login",{
                 //     method: 'POST',
                 //     headers: {
                 //       'Content-Type': 'application/json',

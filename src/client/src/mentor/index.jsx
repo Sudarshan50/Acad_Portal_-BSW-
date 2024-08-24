@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard";
 import MarkAttendance from "./MarkAttendance";
 import FloatOpportunity from "./FloatOppurtunity";
 import Profile from "./profile/Profile";
+import ViewQueries from "./ViewQuery";
 
 export default function Mentor() {
   return (
@@ -14,6 +15,7 @@ export default function Mentor() {
       <Route path="/mark_attendance" element={<MarkAttendance />} />
       <Route path="/float_opportunity" element={<FloatOpportunity />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path = '/view_queries/:qid' element = {<ViewQueries />} />
       {/* <Route path="raise_queries" element={< />} /> */}
       {/* <Route path="view_queries/:qid" element={< />} /> */}
       {/* <Route path="query_feedback" element={<= />} /> */}

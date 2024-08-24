@@ -381,12 +381,11 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
                   >
                     <RemoveRedEyeIcon />
                   </IconButton> */}
+                  {console.log(row.attachments)}
                   {row.attachments.map((attachment, index) => (
                     <img
                       key={index}
-                      // src={`../../public/uploads/queries${attachment}`}
-                      //take path of uploads folder...
-                      src={`http://localhost:3001/uploads/queries/${attachment}`}
+                      src={attachment}
                       alt="Attachment"
                       style={{
                         width: "60px",

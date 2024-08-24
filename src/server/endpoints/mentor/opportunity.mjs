@@ -5,6 +5,7 @@ import Opportunity from '../../models/opportunity.mjs';
 const router=express.Router();
 
 
+
 //GET: get all opportunities
 router.get("/",async (req,res)=>{
     try{

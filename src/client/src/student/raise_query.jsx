@@ -86,7 +86,7 @@ const QueryForm = () => {
     });
     try {
       const res = await axios.post(
-        "https://acadbackend-sudarshan50s-projects.vercel.app/api/student/queries/create",
+        "http://localhost:3001/api/student/queries/create",
         formData,
         {
           headers: {

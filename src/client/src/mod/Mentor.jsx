@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Menu, MenuItem, IconButton } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { MentNav } from './myNav';
+import { MentNav } from './ModNav';
 
 const dummyMentors = [
     { id: 1, name: 'Amit Sharma', course: 'COL 100', hours: 30, profileLink: '/profiles/amit' },

@@ -8,7 +8,7 @@ import {
 } from "@material-tailwind/react";
 import ApprovedActivities from "./ApprovedActivities";
 import OtherActivities from "./OtherActivities";
-import { MentNav } from "../../mod/myNav";
+import { MentNav } from "../MentNav";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
@@ -42,7 +42,7 @@ const Profile = ({ isMod }) => {
     // };
     try {
       const info = await axios.get(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/auth/details/${Cookies.get(
+        `http://localhost:3001/api/mentor/auth/details/${Cookies.get(
           "kerberos"
         )}`
       );
@@ -110,7 +110,7 @@ const Profile = ({ isMod }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/auth/change-password",
+        "http://localhost:3001/api/mentor/auth/change-password",
         {
           kerberos: Cookies.get("kerberos"),
           oldPassword: key.oldpassword,

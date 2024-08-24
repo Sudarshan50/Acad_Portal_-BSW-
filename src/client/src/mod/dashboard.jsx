@@ -10,7 +10,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { MentNav } from "./myNav";
+import { MentNav } from "./ModNav";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
@@ -29,7 +29,7 @@ const Dashboard = () => {
   const fetechQueries = async () => {
     try {
       const res = await axios.get(
-        "https://acadbackend-sudarshan50s-projects.vercel.app/api/moderator/queries"
+        "http://localhost:3001/api/moderator/queries"
       );
       if (res.status === 200) {
         setModQueries(res.data);
@@ -59,7 +59,7 @@ const Dashboard = () => {
   const handleApprove = async (id) => {
     try {
       const res = await axios.post(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/moderator/queries/make_available/${id}`,
+        `http://localhost:3001/api/moderator/queries/make_available/${id}`,
         {
           kerberos: Cookies.get("kerberos"),
         }
@@ -77,7 +77,7 @@ const Dashboard = () => {
   const handleReject = async (id) => {
     try {
       const res = await axios.post(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/moderator/queries/dismiss/${id}`,
+        `http://localhost:3001/api/moderator/queries/dismiss/${id}`,
         {
           kerberos: Cookies.get("kerberos"),
         }

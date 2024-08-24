@@ -30,7 +30,7 @@ const MarkAttendance = () => {
     formData.append("photo", photo);
     try {
       const res = await axios.post(
-        "https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/attendance/post",
+        "http://localhost:3001/api/mentor/attendance/post",
         formData,
         { headers: "Content-Type:multipart/form-data" }
       );

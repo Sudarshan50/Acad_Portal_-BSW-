@@ -21,12 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-  formidable({
-    multiples: true, // Enable multiple files
-    maxFileSize: 10 * 1024 * 1024, // Limit file size to 10MB
-  })
-);
+
 //db connection....
 try {
   await mongoose.connect(process.env.DB_URI);

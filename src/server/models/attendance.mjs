@@ -15,7 +15,7 @@ const attendanceSchema = new mongoose.Schema({
         required: true
     },
     photoPath: {
-        type: String, // Assuming file URL
+        type: [String], // Assuming file URL
         // Limiting to 10MB
     },
     hours: {

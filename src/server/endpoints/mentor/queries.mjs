@@ -4,6 +4,8 @@ import Query from '../../models/query.mjs';
 
 const queries_router=express.Router();
 
+
+
 //POST: /mentor/queries/:id - Take a query
 queries_router.post('/:id',async (req,res)=>{
     try{

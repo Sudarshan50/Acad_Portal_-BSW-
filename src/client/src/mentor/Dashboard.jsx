@@ -18,7 +18,7 @@ import { Button } from "@material-tailwind/react";
 import LoupeIcon from "@mui/icons-material/Loupe";
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-import { MentNav } from "../mod/myNav";
+import { MentNav } from "./MentNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -40,7 +40,7 @@ const Dashboard = () => {
 
   const fetchQueries = async () => {
     try {
-      const res = await axios.get("https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/queries/");
+      const res = await axios.get("http://localhost:3001/api/mentor/queries/");
       setQueries(res.data);
     } catch (error) {
       console.error(error);
@@ -49,7 +49,7 @@ const Dashboard = () => {
   const fetchOpportunities = async () => {
     try {
       const res = await axios.get(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/opportunity/`
+        `http://localhost:3001/api/mentor/opportunity/`
       );
       if (res.status === 200) {
         setOpportunities(res.data);
@@ -61,7 +61,7 @@ const Dashboard = () => {
   const fetchMentorId = async () => {
     try {
       const res = await axios.get(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/auth/details/${Cookies.get(
+        `http://localhost:3001/api/mentor/auth/details/${Cookies.get(
           "kerberos"
         )}`
       );
@@ -92,7 +92,7 @@ const Dashboard = () => {
     console.log(selectedItem);
     try {
       const res = await axios.post(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/queries/${selectedItem._id}`,
+        `http://localhost:3001/api/mentor/queries/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
         }
@@ -110,7 +110,7 @@ const Dashboard = () => {
   const handleTakeOppurtunity = async () => {
     try {
       const res = await axios.post(
-        `https://acadbackend-sudarshan50s-projects.vercel.app/api/mentor/opportunity/take/${selectedItem._id}`,
+        `http://localhost:3001/api/mentor/opportunity/take/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
         }
@@ -163,6 +163,7 @@ const Dashboard = () => {
                 </>
               )}
             <Button
+              style={{ padding:"15px", margin:"1em"}}
               variant="contained"
               color="primary"
               onClick={handleTakeQuery}
@@ -170,8 +171,9 @@ const Dashboard = () => {
               Take Up
             </Button>
             <Button
+              style={{ padding:"15px" }}
               variant="contained"
-              onClick={() => console.log("View Query")}
+              onClick={()=>navigate(`/mentor/view_query/${selectedItem._id}`)}
             >
               View Query
             </Button>
@@ -402,6 +404,7 @@ const Dashboard = () => {
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
+            overflowBlock: "scroll",
             position: "absolute",
             top: "50%",
             left: "50%",

@@ -1,22 +1,21 @@
 import express from "express";
 import Query from "../../models/query.mjs";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
 import Student from "../../models/student.mjs";
 import { ObjectId } from "mongodb";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import { v4 as uuidv4 } from "uuid";
 import { v2 as cloudinary } from "cloudinary";
-import e from "express";
+import formidable from "express-formidable";
 
 const queries_router = express.Router();
+const config = formidable({
+  multiples: true, // Enable multiple files
+  maxFileSize: 10 * 1024 * 1024, // Limit file size to 10MB
+});
 
-queries_router.post("/create", async (req, res) => {
+queries_router.post("/create", config, async (req, res) => {
   try {
     const { kerberos, type, description } = req.fields;
-    const uploadedFiles = req.files.attachments;
+    const uploadedFiles = req.files?.attachments;
 
     const student = await Student.findOne({ kerberos });
     if (!student) {
@@ -104,6 +103,7 @@ queries_router.get("/", async (req, res) => {
 //GET: /student/queries/taken - Get all resolved queries of a student
 queries_router.get("/taken", async (req, res) => {
   try {
+    console.log(req.query);
     const student = await Student.findOne({ kerberos: req.body.kerberos });
     if (!student) {
       res.status(400).send("Student not found");
@@ -146,7 +146,7 @@ queries_router.patch("/resolve/:id", async (req, res) => {
 });
 
 //UPDATE: /student/queries/update/:id - Update a query
-queries_router.patch("/update/:id", async (req, res) => {
+queries_router.patch("/update/:id", config, async (req, res) => {
   try {
     const student = await Student.findOne({ kerberos: req.fields.kerberos });
     if (!student) {
@@ -170,7 +170,7 @@ queries_router.patch("/update/:id", async (req, res) => {
       query.description = req.fields.description;
     }
     if (req.files.attachments) {
-      const uploadedFiles = req.files.attachments;
+      const uploadedFiles = req.files?.attachments;
       for (const attachment of query.attachments) {
         const publicId = attachment.split("/").slice(-1)[0].split(".")[0];
         console.log(publicId);
