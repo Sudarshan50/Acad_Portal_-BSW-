@@ -55,7 +55,7 @@ export default function JoySignInSideTemplate() {
       password: formElements.password.value,
     };
     try {
-      const res = await axios.post(`http://localhost:3001/api/login`, data);
+      const res = await axios.post(`https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/login`, data);
       if(res.data.status === "unverified")
       {
         toast.error("Please verify your account to login");
@@ -176,7 +176,7 @@ export default function JoySignInSideTemplate() {
                 //     kerberos: formElements.kerberos.value,
                 //     password: formElements.password.value,
                 //   };
-                //   fetch("http://localhost:3001/api/login",{
+                //   fetch("https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/login",{
                 //     method: 'POST',
                 //     headers: {
                 //       'Content-Type': 'application/json',

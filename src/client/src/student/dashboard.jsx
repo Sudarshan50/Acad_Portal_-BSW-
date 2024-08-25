@@ -29,7 +29,7 @@ const StudentDashboard = () => {
 
   const authCheck = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/api/auth/check", {
+      const res = await axios.get("https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/auth/check", {
         headers: {
           "x-access-token": Cookies.get("token"),
         },
@@ -47,11 +47,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }
@@ -85,11 +85,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }

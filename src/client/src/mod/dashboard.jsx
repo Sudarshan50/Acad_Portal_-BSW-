@@ -36,14 +36,14 @@ const Dashboard = () => {
   const fetechQueries = async () => {
     try {
       const attendance = await axios.get(
-        "http://localhost:3001/api/moderator/attendance/" +
+        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/attendance/" +
           Cookies.get("kerberos")
       );
       const queries = await axios.get(
-        "http://localhost:3001/api/moderator/queries/" + Cookies.get("kerberos")
+        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/" + Cookies.get("kerberos")
       );
       const opportunities = await axios.get(
-        "http://localhost:3001/api/moderator/opportunities/" +
+        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/opportunities/" +
           Cookies.get("kerberos")
       );
       if (
