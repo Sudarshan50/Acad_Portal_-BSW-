@@ -92,9 +92,9 @@ router.get("/verify/:token", async (req, res) => {
     );
     const temp = await Student.findOne({ _id: token.userId });
     await Token.deleteOne(token._id);
-    res.render("index.ejs", {
-      first: temp.name,
-    });
+    res.redirect(
+      "https://acadfrontend-git-main-sudarshan50s-projects.vercel.app/"
+    );
   } catch (err) {
     console.log(err);
   }
