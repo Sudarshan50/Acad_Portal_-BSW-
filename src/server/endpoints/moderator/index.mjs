@@ -7,5 +7,8 @@ import queries_router from './queries.mjs';
 router.use('/queries', queries_router);
 import attendance_router from './attendance.mjs';
 router.use('/attendance', attendance_router);
+import opportunitiesRouter from '../students/oppurtunity.mjs';
+router.use('/opportunities', opportunitiesRouter);
 
 export default router;
+

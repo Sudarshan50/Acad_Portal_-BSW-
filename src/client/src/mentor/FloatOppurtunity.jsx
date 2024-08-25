@@ -29,7 +29,7 @@ const FloatOpportunity = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/opportunity/post",
+        "http://localhost:3001/api/mentor/opportunity/post",
         {
           kerberos: Cookies.get("kerberos"),
           title: title,

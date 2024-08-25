@@ -18,6 +18,20 @@ const attendanceSchema = new mongoose.Schema({
         type: [String], // Assuming file URL
         // Limiting to 10MB
     },
+    approved_by:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'moderator',
+        default:null
+    },
+    disapproved_by:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'moderator',
+        default:null
+    },
+    status:{
+        type: String,
+        default: 'UNAPPROVED'
+    },
     hours: {
         type: Number,
         default: 0
@@ -29,15 +43,15 @@ const attendanceSchema = new mongoose.Schema({
     }
 });
 
-attendanceSchema.virtual('status').get(function() {
-    if (!this.last_action_moderator) {
-        return 'UNAPPROVED';
-    } else if (this.hours === 0) {
-        return 'REJECTED';
-    } else {
-        return 'APPROVED';
-    }
-});
+// attendanceSchema.virtual('status').get(function() {
+//     if (!this.last_action_moderator) {
+//         return 'UNAPPROVED';
+//     } else if (this.hours === 0) {
+//         return 'REJECTED';
+//     } else {
+//         return 'APPROVED';
+//     }
+// });
 
 const Attendance = mongoose.model('attendance', attendanceSchema);
 

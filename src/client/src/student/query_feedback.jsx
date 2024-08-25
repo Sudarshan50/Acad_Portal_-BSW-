@@ -4,6 +4,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import { styled } from '@mui/system';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 const theme = createTheme({
   palette: {
@@ -62,7 +63,7 @@ const QueryFeedback = () => {
             feedback: feedback,
             kerberos: Cookies.get('kerberos')
         }
-        fetch('https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/resolve/'+qid, {
+        fetch('http://localhost:3001/api/student/queries/resolve/'+qid, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,8 +73,9 @@ const QueryFeedback = () => {
         }).then(response => {
             if (response.status === 401|| response.status === 403) {
                 alert('Unauthorized');
-                navigate('../../')
+                navigate('/student');
             } else {
+                toast.success('Feedback submitted successfully');
                 return response.json();
             }
         }

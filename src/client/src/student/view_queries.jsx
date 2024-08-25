@@ -63,7 +63,7 @@ const ViewQueries = () => {
       navigate("/student");
     }
     fetch(
-      "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/one?qid=" +
+      "http://localhost:3001/api/student/queries/one?qid=" +
         encodeURIComponent(qid) +
         "&kerberos=" +
         encodeURIComponent(Cookies.get("kerberos")),
@@ -173,7 +173,7 @@ const ViewQueries = () => {
                       <img
                         src={attachment}
                         alt="☠️"
-                        style={{ maxWidth: "100%" , maxHeight: "100%"}}
+                        style={{ maxWidth: "100%", maxHeight: "100%" }}
                       />
                     </ListItem>
                   ))}
@@ -181,26 +181,28 @@ const ViewQueries = () => {
               </Paper>
             </ContentContainer>
           </MainContainer>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleFabClick}
-            sx={{
-              position: "fixed",
-              bottom: 16,
-              right: 16,
-              borderRadius: "20px",
-              padding: "12px 24px",
-              fontSize: "18px",
-              textTransform: "none",
-              backgroundColor: "#3f51b5",
-              "&:hover": {
-                backgroundColor: "#303f9f",
-              },
-            }}
-          >
-            Feedback
-          </Button>
+          {query.status === "TAKEN" ? (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleFabClick}
+              sx={{
+                position: "fixed",
+                bottom: 16,
+                right: 16,
+                borderRadius: "20px",
+                padding: "12px 24px",
+                fontSize: "18px",
+                textTransform: "none",
+                backgroundColor: "#3f51b5",
+                "&:hover": {
+                  backgroundColor: "#303f9f",
+                },
+              }}
+            >
+              Feedback
+            </Button>
+          ) : null}
         </ThemeProvider>
       )}
     </>

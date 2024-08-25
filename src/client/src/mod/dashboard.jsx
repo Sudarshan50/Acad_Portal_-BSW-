@@ -15,24 +15,52 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { Navigate, useNavigate } from "react-router-dom";
+import handleData from "./utils/dataHandler.js";
+import ModActionAwaitedQuery from "./Modals/ModActionAwaitedQuery.jsx";
+import ModActionAwaitedAttendance from "./Modals/ModActionAwaitedAttendace.jsx";
+import PastActivitiesDismissQuery from "./Modals/PastActivitiesQueries.jsx";
+import PastActivityAttendace from "./Modals/PastActivityAttendace.jsx";
+import OngoingActivitesQuery from "./Modals/OngoingAcitivitesQuery.jsx";
+import OngoingAcitivitesOppurtunites from "./Modals/OngoingActivitiesOpputunities.jsx";
+import formatTimestamp from "../components/time_formatter.js";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [modQueries, setModQueries] = useState([]);
-
-  // Mock data to replace fetch calls
-  // const modQueries = [
-  //   // { id: 1, title: "Query 1", status: "QUEUED" },
-  //   // { id: 2, title: "Query 2", status: "RESOLVED" },
-  // ];
+  const [selectedItem, setSelectedItem] = useState({});
+  const [queries, setQueries] = useState([]);
+  const [attendance, setAttendance] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
+  const [modQueries, setModQueries] = useState({});
+  const [ongoingActivities, setOngoingActivities] = useState({});
+  const [pastActivities, setPastActivities] = useState({});
   const fetechQueries = async () => {
     try {
-      const res = await axios.get(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries"
+      const attendance = await axios.get(
+        "http://localhost:3001/api/moderator/attendance/" +
+          Cookies.get("kerberos")
       );
-      if (res.status === 200) {
-        setModQueries(res.data);
+      const queries = await axios.get(
+        "http://localhost:3001/api/moderator/queries/" + Cookies.get("kerberos")
+      );
+      const opportunities = await axios.get(
+        "http://localhost:3001/api/moderator/opportunities/" +
+          Cookies.get("kerberos")
+      );
+      if (
+        !attendance.status === 200 ||
+        !queries.data === 200 ||
+        !opportunities.data === 200
+      ) {
+        toast.error("Error fetching data");
+      }
+      if (attendance.status === 200) {
+        setAttendance(attendance.data);
+      }
+      if (queries.status === 200) {
+        setQueries(queries.data);
+      }
+      if (opportunities.status === 200) {
+        setOpportunities(opportunities.data);
       }
     } catch (e) {
       console.log(e);
@@ -42,57 +70,24 @@ const Dashboard = () => {
     fetechQueries();
   }, []);
 
-  const ongoingActivities = [
-    { id: 3, title: "Activity 1", status: "AVAILABLE" },
-    { id: 4, title: "Activity 2", status: "TAKEN" },
-  ];
-
-  const pastActivities = [
-    { id: 5, title: "Past Activity 1", status: "DISMISSED" },
-    { id: 6, title: "Past Activity 2", status: "APPROVED" },
-  ];
-
-  const handleItemClick = (item) => {
-    setSelectedItem(item);
-    console.log(selectedItem);
+  const dataHandler = () => {
+    const handledData = handleData(queries, attendance, opportunities);
+    setModQueries(handledData.modQueries);
+    setOngoingActivities(handledData.ongoingActivities);
+    setPastActivities(handledData.pastActivities);
   };
-  const handleApprove = async (id) => {
-    try {
-      const res = await axios.post(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/make_available/${id}`,
-        {
-          kerberos: Cookies.get("kerberos"),
-        }
-      );
-      if (res.status === 200) {
-        toast.success("Query Approved");
-        fetechQueries();
-        handleClose();
-      }
-    } catch (err) {
-      toast.warn("Query already approved!");
-      console.log(err);
-    }
-  };
-  const handleReject = async (id) => {
-    try {
-      const res = await axios.post(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/dismiss/${id}`,
-        {
-          kerberos: Cookies.get("kerberos"),
-        }
-      );
-      if (res.status === 200) {
-        toast.success("Query Rejected");
-        fetechQueries();
-        handleClose();
-      }
-    } catch (err) {
-      toast.warn("Query already dimsissed!");
-      console.log(err);
-    }
-  };
+  useEffect(() => {
+    dataHandler();
+  }, [attendance, queries, opportunities]);
+  console.log(opportunities);
 
+  const handleViewQuery = (id) => {
+    console.log(id);
+  };
+  const handleItemClick = (item, type) => {
+    setSelectedItem({ item, type });
+  };
+  console.log(selectedItem);
   const handleClose = () => {
     setSelectedItem(null);
   };
@@ -103,54 +98,113 @@ const Dashboard = () => {
       <div
         style={{ width: "100vw", height: "max-content", minHeight: "100vh" }}
       >
-        {/* Integrated PrimarySearchAppBar */}
-        {/* <PrimarySearchAppBar /> */}
-
+        {/* mod action section */}
         <Box sx={{ mx: "10%", mt: 4 }}>
-          {/* Mod Action Awaited Section */}
           <Typography variant="h5" gutterBottom>
             Mod Action Awaited
           </Typography>
-          <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            {modQueries.length ? (
-              modQueries.map((query) => (
-                <Card key={query._id} sx={{ minWidth: 275 }}>
-                  <CardContent>
-                    <Typography variant="h6">{query.description}</Typography>
-                    <Typography color="text.secondary">
-                      {query.status}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button size="small" onClick={() => handleItemClick(query)}>
-                      View
-                    </Button>
-                  </CardActions>
-                </Card>
-              ))
-            ) : (
-              <CircularProgress />
-            )}
-          </Box>
-
+          <Typography variant="h7" gutterBottom mt={4}>
+            Queries
+            <Box
+              display="flex"
+              marginTop={1.5}
+              marginBottom={1.5}
+              flexDirection="row"
+              flexWrap="wrap"
+              gap={2}
+            >
+              {modQueries.queries?.length ? (
+                modQueries.queries.map((query) => (
+                  <Card key={query._id} sx={{ minWidth: 275 }}>
+                    <CardContent>
+                      <Typography variant="h6">{query.description}</Typography>
+                      <Typography color="text.secondary">
+                        State: {query.status}
+                      </Typography>
+                      <Typography color="p">Course: {query.type}</Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size="small"
+                        onClick={() => handleItemClick(query, "section1p1")}
+                      >
+                        View
+                      </Button>
+                    </CardActions>
+                  </Card>
+                ))
+              ) : (
+                <CircularProgress />
+              )}
+            </Box>
+          </Typography>
+          <Typography variant="h7" gutterBottom mt={4}>
+            Attendance
+            <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
+              {modQueries.attendance?.length ? (
+                modQueries.attendance.map((attendance) => (
+                  <Card key={attendance._id} sx={{ minWidth: 275 }}>
+                    <CardContent>
+                      <Typography variant="h6">
+                        {attendance.description}
+                      </Typography>
+                      <Typography color="text.secondary">
+                        State: {attendance.status}
+                      </Typography>
+                      <Typography color="p">
+                        Market At: {formatTimestamp(attendance.date)}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button
+                        size="small"
+                        onClick={() =>
+                          handleItemClick(attendance, "section1p2")
+                        }
+                      >
+                        View
+                      </Button>
+                    </CardActions>
+                  </Card>
+                ))
+              ) : (
+                <CircularProgress />
+              )}
+            </Box>
+          </Typography>
+          {/* End of Mod Action Awaited Section */}
           {/* Ongoing Activities Section */}
           <Typography variant="h5" gutterBottom mt={4}>
             Ongoing Activities
           </Typography>
-          <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            {ongoingActivities.length ? (
-              ongoingActivities.map((activity) => (
-                <Card key={activity.id} sx={{ minWidth: 275 }}>
+          <Typography variant="h7" marginBottom={40} gutterBottom mt={4}>
+            Available/Taken Queries
+          </Typography>
+          <Box
+            display="flex"
+            marginBottom={1.5}
+            marginTop={1.5}
+            flexDirection="row"
+            flexWrap="wrap"
+            gap={2}
+          >
+            {ongoingActivities.queries?.length ? (
+              ongoingActivities.queries.map((queries) => (
+                <Card key={queries._id} sx={{ minWidth: 275 }}>
                   <CardContent>
-                    <Typography variant="h6">{activity.title}</Typography>
+                    <Typography variant="h6">{queries.description}</Typography>
                     <Typography color="text.secondary">
-                      {activity.status}
+                      State: {queries.status}
+                    </Typography>
+                    <Typography color="p">Course: {queries.type}</Typography>
+                    <Typography color="body1">
+                      Last Action (MOD): {queries.last_action_moderator?.name}
                     </Typography>
                   </CardContent>
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleItemClick(activity)}
+                      onClick={() => handleItemClick(queries, "section2p1")}
                     >
                       View
                     </Button>
@@ -161,25 +215,159 @@ const Dashboard = () => {
               <CircularProgress />
             )}
           </Box>
-
-          {/* Past Activities Section */}
-          <Typography variant="h5" gutterBottom mt={4}>
-            Past Activities
+          <Typography variant="h7" marginBottom={40} gutterBottom mt={4}>
+            Available/Taken Opportunities
           </Typography>
-          <Box display="flex" flexDirection="row" flexWrap="wrap" gap={2}>
-            {pastActivities.length ? (
-              pastActivities.map((activity) => (
-                <Card key={activity.id} sx={{ minWidth: 275 }}>
+          <Box
+            display="flex"
+            marginBottom={1.5}
+            marginTop={1.5}
+            flexDirection="row"
+            flexWrap="wrap"
+            gap={2}
+          >
+            {ongoingActivities.opportunities?.length ? (
+              ongoingActivities.opportunities.map((opportunities) => (
+                <Card key={opportunities._id} sx={{ minWidth: 275 }}>
                   <CardContent>
-                    <Typography variant="h6">{activity.title}</Typography>
+                    <Typography variant="h6">{opportunities.title}</Typography>
                     <Typography color="text.secondary">
-                      {activity.status}
+                      State: {opportunities.state}
+                    </Typography>
+                    <Typography color="p">
+                      Course: {opportunities.course}
                     </Typography>
                   </CardContent>
                   <CardActions>
                     <Button
                       size="small"
-                      onClick={() => handleItemClick(activity)}
+                      onClick={() =>
+                        handleItemClick(opportunities, "section2p2")
+                      }
+                    >
+                      View
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))
+            ) : (
+              <CircularProgress />
+            )}
+          </Box>
+          {/* Past Activities Section */}
+          <Typography variant="h5" gutterBottom mt={4}>
+            Past Activities
+          </Typography>
+          <Typography variant="h7" marginBottom={40} gutterBottom mt={4}>
+            Dismissed/Approved/Rejected Queries
+          </Typography>
+          <Box
+            display="flex"
+            marginTop={1.5}
+            marginBottom={1.5}
+            flexDirection="row"
+            flexWrap="wrap"
+            gap={2}
+          >
+            {pastActivities.queries?.length ? (
+              pastActivities.queries.map((queries) => (
+                <Card key={queries._id} sx={{ minWidth: 275 }}>
+                  <CardContent>
+                    <Typography variant="h6">{queries.description}</Typography>
+                    <Typography color="text.secondary">
+                      State: {queries.status}
+                    </Typography>
+                    <Typography color="p">Course: {queries.type}</Typography>
+                    <Typography color="body1">
+                      Last Action (MOD): {queries.last_action_moderator?.name}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      onClick={() => handleItemClick(queries, "section3p1")}
+                    >
+                      View
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))
+            ) : (
+              <CircularProgress />
+            )}
+          </Box>
+          <Typography variant="h7" marginBottom={40} gutterBottom mt={4}>
+            Expired Opportunities
+          </Typography>
+          <Box
+            display="flex"
+            marginTop={1.5}
+            marginBottom={1.5}
+            flexDirection="row"
+            flexWrap="wrap"
+            gap={2}
+          >
+            {pastActivities.opportunities?.length ? (
+              pastActivities.opportunities.map((opportunities) => (
+                <Card key={opportunities._id} sx={{ minWidth: 275 }}>
+                  <CardContent>
+                    <Typography variant="h6">{opportunities.title}</Typography>
+                    <Typography color="text.secondary">
+                      State: {opportunities.state}
+                    </Typography>
+                    <Typography color="p">
+                      Course: {opportunities.course}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      onClick={() =>
+                        handleItemClick(opportunities, "section3p2")
+                      }
+                    >
+                      View
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))
+            ) : (
+              <CircularProgress />
+            )}
+          </Box>
+          <Typography variant="h7" marginBottom={40} gutterBottom mt={4}>
+            Approved/Rejected Attendance
+          </Typography>
+          <Box
+            display="flex"
+            marginTop={1.5}
+            marginBottom={2}
+            flexDirection="row"
+            flexWrap="wrap"
+            gap={2}
+          >
+            {pastActivities.attendance?.length ? (
+              pastActivities.attendance.map((attendace) => (
+                <Card key={attendace._id} sx={{ minWidth: 275 }}>
+                  <CardContent>
+                    <Typography variant="h6">
+                      {attendace.description}
+                    </Typography>
+                    <Typography color="text.secondary">
+                      {attendace.status}
+                    </Typography>
+                  <Typography variant="body1">
+                    Market At: {formatTimestamp(attendace.date)}
+                  </Typography>
+                    <Typography color="body1">
+                      Last Action (MOD): {attendace.last_action_moderator?.name}
+                    </Typography>
+                    
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      onClick={() => handleItemClick(attendace, "section3p3")}
                     >
                       View
                     </Button>
@@ -193,50 +381,64 @@ const Dashboard = () => {
         </Box>
 
         {/* Modal for viewing detailed information */}
-        <Modal
-          open={Boolean(selectedItem)}
-          onClose={handleClose}
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-        >
-          <Paper sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600 }}>
-            {selectedItem && (
-              <>
-                <Typography id="modal-title" variant="h6" component="h2">
-                  {selectedItem.title}
-                </Typography>
-                <Typography id="modal-description" sx={{ mt: 2 }}>
-                  Status: {selectedItem.status}
-                </Typography>
-                {/* Depending on the type of item, render different actions */}
-                {(selectedItem.status === "QUEUED" ||
-                  selectedItem.status === "DISMISSED") && (
-                  <Box mt={2}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => {
-                        handleApprove(selectedItem._id);
-                      }}
-                    >
-                      Approve
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="secondary"
-                      sx={{ ml: 2 }}
-                      onClick={() => {
-                        handleReject(selectedItem._id);
-                      }}
-                    >
-                      Reject
-                    </Button>
-                  </Box>
-                )}
-              </>
-            )}
-          </Paper>
-        </Modal>
+        {selectedItem?.type === "section1p1" ? (
+          <ModActionAwaitedQuery
+            sItem={selectedItem?.item}
+            handleClose={handleClose}
+            refecth={() => {
+              fetechQueries();
+              dataHandler();
+            }}
+          />
+        ) : null}
+        {selectedItem?.type === "section1p2" ? (
+          <ModActionAwaitedAttendance
+            sItem={selectedItem?.item}
+            handleClose={handleClose}
+            refecth={() => {
+              fetechQueries();
+              dataHandler();
+            }}
+          />
+        ) : null}
+        {selectedItem?.type === "section3p1" ? (
+          <PastActivitiesDismissQuery
+            sItem={selectedItem?.item}
+            handleClose={handleClose}
+            refecth={() => {
+              fetechQueries();
+              dataHandler();
+            }}
+          />
+        ) : null}
+        {selectedItem?.type === "section3p3" ? (
+          <PastActivityAttendace
+            sItem={selectedItem?.item}
+            handleClose={handleClose}
+            refecth={() => {
+              fetechQueries();
+              dataHandler();
+            }}
+          />
+        ) : null}
+        {selectedItem?.type === "section2p1" ? (
+          <OngoingActivitesQuery
+            sItem={selectedItem?.item}
+            handleClose={handleClose}
+          />
+        ) : null}
+        {selectedItem?.type === "section2p2" ? (
+          <OngoingAcitivitesOppurtunites
+            sItem={selectedItem?.item}
+            handleClose={handleClose}
+          />
+        ) : null}
+        {selectedItem?.type === "section3p2" ? (
+          <OngoingAcitivitesOppurtunites
+            sItem={selectedItem?.item}
+            handleClose={handleClose}
+          />
+        ) : null}
       </div>
     </>
   );

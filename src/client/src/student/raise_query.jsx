@@ -77,6 +77,7 @@ const QueryForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    toast.warning("Please wait while we submit your query");
     const formData = new FormData();
     formData.append("kerberos", Cookies.get("kerberos"));
     formData.append("type", type);
@@ -86,7 +87,7 @@ const QueryForm = () => {
     });
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/create",
+        "http://localhost:3001/api/student/queries/create",
         formData,
         {
           headers: {

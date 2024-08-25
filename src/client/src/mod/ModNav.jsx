@@ -296,7 +296,9 @@ export function MentNav() {
         </IconButton>
 
         {isLoggedIn === false ? (
-          <Button size="sm" variant="text">
+          <Button onClick = {()=>{
+            window.location.href = "/mod/login";
+          }}size="sm" variant="text">
             <span>Log In</span>
           </Button>
         ) : null}

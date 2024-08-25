@@ -7,14 +7,14 @@ const verifEmail = async (email, link) => {
       service: "gmail",
       auth: {
         user: "acadportalverifemail@gmail.com",
-        pass: "yhlr qrxi cebr yspo",
+        pass: "gmzm hflb bkfx trbh",
       },
     });
     // sending email from the gmail account
-    let info = transporter.sendMail({
+    let info = await transporter.sendMail({
         from: "acadportalverifemail@gmail.com", //sender mail...,
         to: email, // reciever mail
-        subject: "Account Verification",
+        subject: "(DO NOT REPLY) Account Verification ",
         text: "Welcome to The Acad Portal of BSW",
         html:`<div>
         <a href = ${link}>Click here to activate your account</a>

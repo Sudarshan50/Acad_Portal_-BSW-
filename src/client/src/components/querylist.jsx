@@ -42,6 +42,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import axios from "axios";
 import { toast } from "react-toastify";
+import formatTimestamp from "./time_formatter";
 function createData(id, name, calories, fat, carbs, protein) {
   return {
     id,
@@ -130,7 +131,7 @@ const headCells = [
     id: "type",
     numeric: true,
     disablePadding: false,
-    label: "Type",
+    label: "Course/Type",
   },
 ];
 
@@ -239,7 +240,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
   const handledelete = async () => {
     try {
       const res = await axios.delete(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/delete/${row._id}`,
+        `http://localhost:3001/api/student/queries/delete/${row._id}`,
         {
           data: { kerberos: Cookies.get("kerberos") },
         }
@@ -300,7 +301,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
             navigate("/student/view_queries/" + row._id);
           }}
         >
-          {row.mentor}
+          {row.mentor_name}
         </TableCell>
         <TableCell
           align="right"
@@ -308,7 +309,8 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
             navigate("/student/view_queries/" + row._id);
           }}
         >
-          {row.raised_at}
+          {/* {row.raised_at} */}
+          {formatTimestamp(row.raised_at)}
         </TableCell>
         <TableCell
           align="right"
@@ -322,36 +324,39 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box>
-              <Button
-                onClick={() => {
-                  navigate("/student/update_queries/" + row._id);
-                }}
-                style={{
-                  background: "blue",
-                  color: "white",
-                  marginTop: "0.5em",
-                  marginLeft: "0.5em",
-                  marginRight: "0.5em",
-                  padding: "5px",
-                }}
-              >
-                Edit
-              </Button>
-              <Button
-                onClick={handledelete}
-                style={{
-                  background: "red",
-                  color: "white",
-                  marginTop: "0.5em",
-                  marginLeft: "0.5em",
-                  marginRight: "0.5em",
-                  padding: "5px",
-                }}
-              >
-                Delete
-              </Button>
-            </Box>
+            {row.status === "QUEUED" ? (
+              <Box>
+                <Button
+                  onClick={() => {
+                    navigate("/student/update_queries/" + row._id);
+                  }}
+                  style={{
+                    background: "blue",
+                    color: "white",
+                    marginTop: "0.5em",
+                    marginLeft: "0.5em",
+                    marginRight: "0.5em",
+                    padding: "5px",
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button
+                  onClick={handledelete}
+                  style={{
+                    background: "red",
+                    color: "white",
+                    marginTop: "0.5em",
+                    marginLeft: "0.5em",
+                    marginRight: "0.5em",
+                    padding: "5px",
+                  }}
+                >
+                  Delete
+                </Button>
+              </Box>
+            ) : null}
+
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
                 Info

@@ -15,7 +15,7 @@ queries_router.post('/:id',async (req,res)=>{
             return;
         }
         const query=await Query.findOne({_id:req.params.id,status:'AVAILABLE'});
-        console.log(query);
+        // console.log(query);
         if(!query){
             res.status(400).send("Query not found");
             return;
@@ -27,7 +27,7 @@ queries_router.post('/:id',async (req,res)=>{
         query.status='TAKEN';
         query.mentor=mentor._id;
         query.taken_at=Date.now();
-        //Update the schema for response
+        query.mentor_name=mentor.name;
         await query.save();
         res.status(200).send(query);
     }catch(e){

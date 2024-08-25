@@ -21,24 +21,23 @@ queries_router.post("/create", config, async (req, res) => {
     if (!student) {
       return res.status(400).send("Student not found");
     }
-
     const fileUploads = [];
-    const filesArray = Array.isArray(uploadedFiles)
-      ? uploadedFiles
-      : [uploadedFiles];
+    if (uploadedFiles) {
+      const filesArray = Array.isArray(uploadedFiles)
+        ? uploadedFiles
+        : [uploadedFiles];
 
-    for (const file of filesArray) {
-      const filePath = file.path; // Use `path` provided by express-formidable
+      for (const file of filesArray) {
+        const filePath = file.path; // Use `path` provided by express-formidable
 
-      // Upload to Cloudinary
-      const uploadPromise = cloudinary.uploader.upload(filePath, {
-        public_id: `${uuidv4()}`,
-        folder: "queries",
-      });
-
-      fileUploads.push(uploadPromise);
+        // Upload to Cloudinary
+        const uploadPromise = cloudinary.uploader.upload(filePath, {
+          public_id: `${uuidv4()}`,
+          folder: "queries",
+        });
+        fileUploads.push(uploadPromise);
+      }
     }
-
     const uploadResults = await Promise.all(fileUploads);
     const fileUrls = uploadResults.map((result) => result.secure_url);
 
@@ -73,7 +72,6 @@ queries_router.get("/one", async (req, res) => {
     const queries = await Query.find({
       student: student._id,
       _id: new ObjectId(qid),
-      status: "QUEUED",
     });
     if (queries.length == 0) {
       res.status(400).send("Query not found");
@@ -204,7 +202,6 @@ queries_router.patch("/update/:id", config, async (req, res) => {
 //DELETE: /student/queries/delete/:id - Delete a query
 queries_router.delete("/delete/:id", async (req, res) => {
   try {
-    console.log(req.body);
     const student = await Student.findOne({ kerberos: req.body.kerberos });
     if (!student) {
       res.status(400).send("Student not found");
@@ -216,7 +213,7 @@ queries_router.delete("/delete/:id", async (req, res) => {
       status: "QUEUED",
     });
     if (!query) {
-      res.status(400).send("Query not found");
+      res.status(400).send("Query can't be deleted, it is already available");
       return;
     }
     await Query.deleteOne({ _id: req.params.id });

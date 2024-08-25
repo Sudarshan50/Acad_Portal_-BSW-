@@ -37,7 +37,7 @@ router.post("/signup", async (req, res) => {
   await authToken.save();
   console.log(authToken);
   try {
-    const link = `http://localhost:3001/api/verify/${authToken.token}`;
+    const link = `http://localhost:3002/api/verify/${authToken.token}`;
     await verifEmail(`${student.kerberos}@iitd.ac.in`, link); //
     res.status(201).json({
       message: "Please check your email to verify your account..",

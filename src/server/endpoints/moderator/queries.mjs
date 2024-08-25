@@ -4,9 +4,21 @@ import Moderator from "../../models/moderator.mjs";
 // import Mentor from '../../models/mentor.jsx';
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/:kerberos", async (req, res) => {
   try {
-    const queries = await Query.find();
+    const mod = await Moderator.findOne({ kerberos: req.params.kerberos });
+    if (!mod) {
+      return res.status(400).send("Moderator not found");
+    }
+    const queries = await Query.find()
+      .populate({
+        path: "mentor",
+        select: "name",
+      })
+      .populate({
+        path: "last_action_moderator",
+        select: "name",
+      });
     res.status(200).send(queries);
   } catch (err) {
     console.log(err);
@@ -43,6 +55,7 @@ router.post("/dismiss/:id", async (req, res) => {
 router.post("/make_available/:id", async (req, res) => {
   try {
     const moderator = await Moderator.findOne({ kerberos: req.body.kerberos });
+    console.log(moderator);
     if (!moderator) {
       res.status(400).send("Moderator not found");
       return;
@@ -73,23 +86,27 @@ router.post("/reject_resolve/:id", async (req, res) => {
       res.status(400).send("Moderator not found");
       return;
     }
-    const query = await Query.findOne({ _id: req.params.id });
+    const query = await Query.findOne({ _id: req.params.id }).populate(
+      "mentor"
+    );
     if (!query) {
       res.status(400).send("Query not found");
       return;
     }
     if (
-      query.status == "RESOLVED" ||
-      query.status == "REJECTED" ||
-      query.status == "APPROVED"
+      query.status == "QUEUED" ||
+      query.status == "DISMISSED" ||
+      query.status == "TAKEN" ||
+      query.status == "AVAILABLE"
     ) {
       res.status(400).send("Query not yet resolved");
       return;
     }
     query.status = "REJECTED";
     query.last_action_moderator = moderator._id;
-    query.mentor.hours -= query.hours;
     await query.save();
+    query.mentor.hours -= query.hours;
+    await query.mentor.save();
     res.status(200).send(query);
   } catch (e) {
     res.status(500).send(e);
@@ -104,15 +121,18 @@ router.post("/approve_resolve/:id", async (req, res) => {
       res.status(400).send("Moderator not found");
       return;
     }
-    const query = await Query.findOne({ _id: req.params.id });
+    const query = await Query.findOne({ _id: req.params.id }).populate(
+      "mentor"
+    );
     if (!query) {
       res.status(400).send("Query not found");
       return;
     }
     if (
-      query.status == "RESOLVED" ||
-      query.status == "REJECTED" ||
-      query.status == "APPROVED"
+      query.status == "QUEUED" ||
+      query.status == "DISMISSED" ||
+      query.status == "TAKEN" ||
+      query.status == "AVAILABLE"
     ) {
       res.status(400).send("Query not yet resolved");
       return;
@@ -124,8 +144,9 @@ router.post("/approve_resolve/:id", async (req, res) => {
     query.hours = Number(req.body.hours);
     query.status = "APPROVED";
     query.last_action_moderator = moderator._id;
-    query.mentor.hours += query.hours;
     await query.save();
+    query.mentor.hours += Number(req.body.hours);
+    await query.mentor.save();
     res.status(200).send(query);
   } catch (e) {
     res.status(500).send(e);

@@ -11,7 +11,6 @@ router.get("/",async (req,res)=>{
     try{
         const opportunities=await Opportunity.find({state:"AVAILABLE"});
         res.status(200).send(opportunities);
-        console.log(opportunities);
     }catch(e){
         res.status(500).send
     }

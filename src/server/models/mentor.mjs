@@ -23,7 +23,8 @@ const mentorSchema=mongoose.Schema({
     },
     hours:{
         type:Number,
-        required:true
+        required:true,
+        default:0,
     }
 })
 

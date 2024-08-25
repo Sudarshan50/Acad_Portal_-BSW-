@@ -277,7 +277,9 @@ export function ComplexNavbar() {
         </IconButton>
 
         {isLoggedIn === false ? (
-          <Button size="sm" variant="text">
+          <Button onClick={()=>{
+            window.location.href = "/"
+          }} size="sm" variant="text">
             <span>Log In</span>
           </Button>
         ) : null}
