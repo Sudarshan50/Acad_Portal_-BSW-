@@ -37,7 +37,7 @@ router.post("/signup", async (req, res) => {
   await authToken.save();
   console.log(authToken);
   try {
-    const link = `http://localhost:3002/api/verify/${authToken.token}`;
+    const link = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/verify/${authToken.token}`;
     await verifEmail(`${student.kerberos}@iitd.ac.in`, link); //
     res.status(201).json({
       message: "Please check your email to verify your account..",
@@ -62,44 +62,42 @@ router.post("/login", async (req, res) => {
   if (!isPasswordCorrect) {
     return res.status(400).json({ message: "Invalid kerberos or password" });
   }
-  if(student.verified === false)
-  {
+  if (student.verified === false) {
     const authToken = await Token.findOne({ userId: student._id });
     try {
-      const link = `http://localhost:3001/api/verify/${authToken.token}`;
+      const link = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/verify/${authToken.token}`;
       await verifEmail(`${student.kerberos}@iitd.ac.in`, link);
       return res.status(201).json({
         message: "Please check your email to verify your account..",
         status: "unverified",
       });
     } catch (err) {
-      return res.status(500).send({ message: "Error in sending email"});
+      return res.status(500).send({ message: "Error in sending email" });
     }
   }
   const token = jwt.sign({ id: student._id }, SECRET_KEY, { expiresIn: "1h" });
 
-  res.json({ message: "Logged in successfully", token ,status: "verified"});
+  res.json({ message: "Logged in successfully", token, status: "verified" });
 });
 
 router.get("/verify/:token", async (req, res) => {
-  try{
+  try {
     const token = await Token.findOne({ token: req.params.token });
     if (!token) {
       return res.status(400).json({ message: "Invalid token" });
     }
-    // console.log(token);
-
-    await Student.updateOne({ _id: token.userId }, {$set:{ verified: true }});
+    await Student.updateOne(
+      { _id: token.userId },
+      { $set: { verified: true } }
+    );
     const temp = await Student.findOne({ _id: token.userId });
     await Token.deleteOne(token._id);
-    res.render("index.ejs",{
-      first:temp.name,
-    })
-  }catch(err)
-  {
+    res.render("index.ejs", {
+      first: temp.name,
+    });
+  } catch (err) {
     console.log(err);
   }
-
 });
 
 // router.use((req,res,next)=>{
