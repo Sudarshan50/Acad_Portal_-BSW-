@@ -4,9 +4,13 @@ import Student from "../models/student.mjs";
 import Token from "../models/token.mjs";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import dotenv from "dotenv";
+import checkAuth from "../middleware/checkAuht.mjs";
+import checkRole from "../middleware/checkRole.mjs";
+dotenv.config();
 
 const router = express.Router();
-const SECRET_KEY = "never-rely-on-secret-key-easy-to-hack";
+// const SECRET_KEY = "never-rely-on-secret-key-easy-to-hack";
 //Authentication
 //POST: /signup - Signup
 router.post("/signup", async (req, res) => {
@@ -27,7 +31,7 @@ router.post("/signup", async (req, res) => {
   });
   await student.save();
 
-  const token = jwt.sign({ id: student._id }, SECRET_KEY, {
+  const token = jwt.sign({ id: student._id }, process.env.APP_SECRET, {
     expiresIn: "423423h",
   });
   const authToken = new Token({
@@ -39,7 +43,7 @@ router.post("/signup", async (req, res) => {
   try {
     const link = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/verify/${authToken.token}`;
     await verifEmail(`${student.kerberos}@iitd.ac.in`, link); //
-    res.status(201).json({
+    res.status(200).json({
       message: "Please check your email to verify your account..",
       token,
     });
@@ -67,7 +71,7 @@ router.post("/login", async (req, res) => {
     try {
       const link = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/verify/${authToken.token}`;
       await verifEmail(`${student.kerberos}@iitd.ac.in`, link);
-      return res.status(201).json({
+      return res.status(200).json({
         message: "Please check your email to verify your account..",
         status: "unverified",
       });
@@ -75,8 +79,13 @@ router.post("/login", async (req, res) => {
       return res.status(500).send({ message: "Error in sending email" });
     }
   }
-  const token = jwt.sign({ id: student._id }, SECRET_KEY, { expiresIn: "1h" });
-
+  const token = jwt.sign(
+    { id: student._id, role: student.role },
+    process.env.APP_SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
   res.json({ message: "Logged in successfully", token, status: "verified" });
 });
 
@@ -115,7 +124,7 @@ router.get("/verify/:token", async (req, res) => {
 // })
 
 import student_router from "./students/index.mjs";
-router.use("/student", student_router);
+router.use("/student", checkAuth, checkRole("student"), student_router);
 
 import mentor_router from "./mentor/index.mjs";
 router.use("/mentor", mentor_router);

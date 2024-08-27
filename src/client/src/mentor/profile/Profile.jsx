@@ -42,9 +42,14 @@ const Profile = ({ isMod }) => {
     // };
     try {
       const info = await axios.get(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/auth/details/${Cookies.get(
+        `http://localhost:3001/api/mentor/auth/details/${Cookies.get(
           "kerberos"
-        )}`
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
       );
       if (info.status === 200) {
         const department = info.data.kerberos;
@@ -110,11 +115,16 @@ const Profile = ({ isMod }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/auth/change-password",
+        "http://localhost:3001/api/mentor/auth/change-password",
         {
           kerberos: Cookies.get("kerberos"),
           oldPassword: key.oldpassword,
           newPassword: key.newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
         }
       );
       if (res.status === 200) {
@@ -196,13 +206,15 @@ const Profile = ({ isMod }) => {
                     <strong>Name:</strong> {personalInfo.name}
                   </Typography>
                   <Typography>
-                    <strong>Email:</strong> {`${personalInfo.kerberos}@iitd.ac.in`}
+                    <strong>Email:</strong>{" "}
+                    {`${personalInfo.kerberos}@iitd.ac.in`}
                   </Typography>
                   <Typography>
                     <strong>Phone:</strong> {personalInfo.phone_number}
                   </Typography>
                   <Typography>
-                    <strong>Department:</strong> {personalInfo.kerberos?.slice(0, 3).toUpperCase()}
+                    <strong>Department:</strong>{" "}
+                    {personalInfo.kerberos?.slice(0, 3).toUpperCase()}
                   </Typography>
                 </div>
               </CardBody>

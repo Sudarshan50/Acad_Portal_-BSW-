@@ -87,16 +87,16 @@ const QueryForm = () => {
     });
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/create",
+        "http://localhost:3001/api/student/queries/create",
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // 'x-access-token': Cookies.get('token'),
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
           },
         }
       );
-      if (res.status === 201) {
+      if (res.status === 200) {
         toast.success("Query submitted successfully");
         nav("/student");
       }
@@ -130,7 +130,7 @@ const QueryForm = () => {
               <MenuItem value={"MTL100"}> MTL100</MenuItem>
               <MenuItem value={"MCP101"}> MCP101</MenuItem>
               <MenuItem value={"MCP100"}> MCP100</MenuItem>
-              <MenuItem value={"PYP"}> PYP</MenuItem>
+              <MenuItem value={"PYP"}> PYP100</MenuItem>
             </Select>
           </StyledFormControl>
           <TextField

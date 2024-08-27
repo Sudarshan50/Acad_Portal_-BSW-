@@ -36,15 +36,31 @@ const Dashboard = () => {
   const fetechQueries = async () => {
     try {
       const attendance = await axios.get(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/attendance/" +
-          Cookies.get("kerberos")
+        "http://localhost:3001/api/moderator/attendance/" +
+          Cookies.get("kerberos"),
+        {
+          headers: {
+            Authorization: "Bearer " + Cookies.get("auth_token"),
+          },
+        }
       );
       const queries = await axios.get(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/" + Cookies.get("kerberos")
+        "http://localhost:3001/api/moderator/queries/" +
+          Cookies.get("kerberos"),
+        {
+          headers: {
+            Authorization: "Bearer " + Cookies.get("auth_token"),
+          },
+        }
       );
       const opportunities = await axios.get(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/opportunities/" +
-          Cookies.get("kerberos")
+        "http://localhost:3001/api/moderator/opportunities/" +
+          Cookies.get("kerberos"),
+        {
+          headers: {
+            Authorization: "Bearer " + Cookies.get("auth_token"),
+          },
+        }
       );
       if (
         !attendance.status === 200 ||
@@ -356,13 +372,12 @@ const Dashboard = () => {
                     <Typography color="text.secondary">
                       {attendace.status}
                     </Typography>
-                  <Typography variant="body1">
-                    Market At: {formatTimestamp(attendace.date)}
-                  </Typography>
+                    <Typography variant="body1">
+                      Market At: {formatTimestamp(attendace.date)}
+                    </Typography>
                     <Typography color="body1">
                       Last Action (MOD): {attendace.last_action_moderator?.name}
                     </Typography>
-                    
                   </CardContent>
                   <CardActions>
                     <Button

@@ -30,17 +30,20 @@ const Dashboard = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [mentId, setMentId] = useState("");
 
-  const checkAuth = ()=>{
+  const checkAuth = () => {
     // if(Cookies.get('kerberos') === undefined)
     // {
     //   navigate('/mentor/login')
     // }
-  }
-
+  };
 
   const fetchQueries = async () => {
     try {
-      const res = await axios.get("https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/queries/");
+      const res = await axios.get("http://localhost:3001/api/mentor/queries/", {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("auth_token")}`,
+        },
+      });
       setQueries(res.data);
     } catch (error) {
       console.error(error);
@@ -49,7 +52,12 @@ const Dashboard = () => {
   const fetchOpportunities = async () => {
     try {
       const res = await axios.get(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/opportunity/`
+        `http://localhost:3001/api/mentor/opportunity/`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
       );
       if (res.status === 200) {
         setOpportunities(res.data);
@@ -61,9 +69,14 @@ const Dashboard = () => {
   const fetchMentorId = async () => {
     try {
       const res = await axios.get(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/auth/details/${Cookies.get(
+        `http://localhost:3001/api/mentor/auth/details/${Cookies.get(
           "kerberos"
-        )}`
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
       );
       if (res.status === 200) {
         setMentId(res.data._id);
@@ -92,15 +105,21 @@ const Dashboard = () => {
     console.log(selectedItem);
     try {
       const res = await axios.post(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/queries/${selectedItem._id}`,
+        `http://localhost:3001/api/mentor/queries/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
         }
       );
       if (res.status === 200) {
         console.log("Query taken successfully");
         fetchQueries();
         toast.success("Query taken successfully");
+        handleClose();
       }
     } catch (err) {
       console.log(err);
@@ -110,13 +129,19 @@ const Dashboard = () => {
   const handleTakeOppurtunity = async () => {
     try {
       const res = await axios.post(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/opportunity/take/${selectedItem._id}`,
+        `http://localhost:3001/api/mentor/opportunity/take/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
         }
       );
       if (res.status === 200) {
         toast.success("Opportunity taken successfully");
+        handleClose();
       }
       console.log(res.data);
     } catch (err) {
@@ -133,37 +158,106 @@ const Dashboard = () => {
       case "takenQuery":
         return (
           <>
-            <Typography variant="h6">
-              Info: {selectedItem.description}
+            <Typography variant="h6">Query Details</Typography>
+            <Typography variant="body1">
+              Description: {selectedItem.description}
+            </Typography>
+            <Typography variant="body1" fontWeight="bold">
+              Quereid By: {selectedItem.student.name},{" "}
+              {selectedItem.student.kerberos.toUpperCase()}
+            </Typography>
+            <Typography variant="body1" fontWeight="bold">
+              Student Phone: {selectedItem.student.phone_number}
             </Typography>
             <Typography variant="body1">
-              Contact: {selectedItem.phone_number}
+              Taken At: {selectedItem.taken_at}
             </Typography>
+            {selectedItem.attachments &&
+              selectedItem.attachments.length > 0 && (
+                <>
+                  <Typography variant="body1">Attachments:</Typography>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      overflow: "scroll",
+                    }}
+                  >
+                    {selectedItem.attachments.map((attachment, index) => (
+                      <img
+                        key={index}
+                        src={attachment}
+                        alt={`Attachment ${index + 1}`}
+                        style={{
+                          width: "200px",
+                          height: "200px",
+                          marginBottom: "2em",
+                          marginTop: "0.8em",
+                          marginRight: "0.8em",
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <Typography variant="subtitle2" fontWeight="bold" color="red">
+                    Note:- To view the image right click on it and view on new
+                    tab
+                  </Typography>
+                </>
+              )}
+            <Button
+              style={{ padding: "15px", marginTop: "1em" }}
+              variant="contained"
+              onClick={() => navigate(`/mentor/view_query/${selectedItem._id}`)}
+            >
+              View Query
+            </Button>
           </>
         );
       case "availableQuery":
         return (
           <>
             <Typography variant="h6">Query Details</Typography>
-            <Typography variant="body1">
+            <Typography variant="body1" >
               Description: {selectedItem.description}
+            </Typography>
+            <Typography variant="body1" fontWeight="bold">
+              Quereid By: {selectedItem.student.name},{" "}
+              {selectedItem.student.kerberos.toUpperCase()}
             </Typography>
             {selectedItem.attachments &&
               selectedItem.attachments.length > 0 && (
                 <>
                   <Typography variant="body1">Attachments:</Typography>
-                  {selectedItem.attachments.map((attachment, index) => (
-                    <img
-                      key={index}
-                      src={attachment}
-                      alt={`Attachment ${index + 1}`}
-                      style={{ maxWidth: "100%", marginBottom: "10px" }}
-                    />
-                  ))}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      overflow: "scroll",
+                    }}
+                  >
+                    {selectedItem.attachments.map((attachment, index) => (
+                      <img
+                        key={index}
+                        src={attachment}
+                        alt={`Attachment ${index + 1}`}
+                        style={{
+                          width: "200px",
+                          height: "200px",
+                          marginBottom: "2em",
+                          marginTop: "0.8em",
+                          marginRight: "0.8em",
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <Typography variant="subtitle2" fontWeight="bold" color="red">
+                    Note:- To view the image right click on it and view on new
+                    tab
+                  </Typography>
                 </>
               )}
             <Button
-              style={{ padding:"15px", margin:"1em"}}
+              style={{ padding: "15px", margin: "1em" }}
               variant="contained"
               color="primary"
               onClick={handleTakeQuery}
@@ -171,9 +265,9 @@ const Dashboard = () => {
               Take Up
             </Button>
             <Button
-              style={{ padding:"15px" }}
+              style={{ padding: "15px" }}
               variant="contained"
-              onClick={()=>navigate(`/mentor/view_query/${selectedItem._id}`)}
+              onClick={() => navigate(`/mentor/view_query/${selectedItem._id}`)}
             >
               View Query
             </Button>
@@ -193,7 +287,7 @@ const Dashboard = () => {
                 </Button>
               </>
             ) : (
-              <Typography variant="body1">
+              <Typography variant="body1" fontWeight="bold">
                 Taken by: {selectedItem.taker ? selectedItem.taker : "No one"}
               </Typography>
             )}
@@ -287,7 +381,9 @@ const Dashboard = () => {
                   key={query._id}
                   onClick={() => handleOpen({ ...query, type: "takenQuery" })}
                 >
-                  <ListItemText primary={query.description} />
+                  <ListItemText
+                    primary={`[${query.type}]: ${query.description}`}
+                  />
                 </ListItem>
               ))
           ) : (
@@ -322,7 +418,9 @@ const Dashboard = () => {
                     handleOpen({ ...query, type: "availableQuery" })
                   }
                 >
-                  <ListItemText primary={query.description} />
+                  <ListItemText
+                    primary={`[${query.type}]: ${query.description}`}
+                  />
                 </ListItem>
               ))
           ) : (
@@ -357,7 +455,9 @@ const Dashboard = () => {
                     handleOpen({ ...opportunity, type: "floatedOpportunity" })
                   }
                 >
-                  <ListItemText primary={opportunity.description} />
+                  <ListItemText
+                    primary={`[${opportunity.course}]: ${opportunity.description}`}
+                  />
                 </ListItem>
               ))
           ) : (
@@ -392,7 +492,9 @@ const Dashboard = () => {
                     handleOpen({ ...opportunity, type: "otherOpportunity" })
                   }
                 >
-                  <ListItemText primary={opportunity.description} />
+                  <ListItemText
+                    primary={`[${opportunity.course}]: ${opportunity.description}`}
+                  />
                 </ListItem>
               ))
           ) : (
@@ -423,7 +525,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-
-     

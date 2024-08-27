@@ -30,7 +30,7 @@ router.post("/post",async (req,res)=>{
         creator:mentor._id
     });
     await opportunity.save().then(()=>{
-        res.status(201).send(opportunity);
+        res.status(200).send(opportunity);
     }).catch((e)=>{
         res.status(400);
         res.send(e);

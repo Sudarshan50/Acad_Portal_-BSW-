@@ -29,11 +29,14 @@ const StudentDashboard = () => {
 
   const authCheck = async () => {
     try {
-      const res = await axios.get("https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/auth/check", {
-        headers: {
-          "x-access-token": Cookies.get("token"),
-        },
-      });
+      const res = await axios.get(
+        "http://localhost:3001/api/auth/check",
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
+      );
       if (res.status === 200) {
         console.log("User is authenticated");
       }
@@ -47,11 +50,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }
@@ -59,7 +62,7 @@ const StudentDashboard = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": Cookies.get("token"),
+        "Authorization": `Bearer ${Cookies.get("auth_token")}`,
       },
     })
       .then((response) => {
@@ -85,11 +88,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }
@@ -97,7 +100,7 @@ const StudentDashboard = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": Cookies.get("token"),
+        Authorization: `Bearer ${Cookies.get("auth_token")}`,
       },
     })
       .then((response) => {

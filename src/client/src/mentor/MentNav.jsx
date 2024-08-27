@@ -238,7 +238,7 @@ export function MentNav() {
 
   useEffect(() => {
     // const token = localStorage.getItem("token");
-    const token = Cookies.get("token");
+    const token = Cookies.get("auth_token");  
     if (token) {
       setIsLoggedIn(true);
     }

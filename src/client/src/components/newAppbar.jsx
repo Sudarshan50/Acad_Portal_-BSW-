@@ -27,6 +27,8 @@ import {
   Bars2Icon,
 } from "@heroicons/react/24/solid";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // profile menu component
 const profileMenuItems = [
@@ -233,12 +235,12 @@ function NavList() {
 }
 
 export function ComplexNavbar() {
+  const navigate = useNavigate();
   const [isNavOpen, setIsNavOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
-    const token = Cookies.get("token");
+    const token = Cookies.get("auth_token");
     if (token) {
       setIsLoggedIn(true);
     }

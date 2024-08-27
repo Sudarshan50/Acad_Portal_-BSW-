@@ -85,12 +85,12 @@ const QueryForm = () => {
     try {
       console.log(id);
       let res = await axios.patch(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/update/${id}`,
+        `http://localhost:3001/api/student/queries/update/${id}`,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // "x-access-token": Cookies.get("token"),
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
           },
         }
       );
@@ -112,7 +112,7 @@ const QueryForm = () => {
       navigate("/student");
     }
     fetch(
-      "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/queued?qid=" +
+      "http://localhost:3001/api/student/queries/queued?qid=" +
         encodeURIComponent(qid) +
         "&kerberos=" +
         encodeURIComponent(Cookies.get("kerberos")),
@@ -120,7 +120,7 @@ const QueryForm = () => {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "x-access-token": Cookies.get("token"),
+          Authorization: `Bearer ${Cookies.get("auth_token")}`,
         },
       }
     )

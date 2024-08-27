@@ -13,6 +13,12 @@ const studentSchema=mongoose.Schema({
         type:String,
         required:true,
     },
+    role:{
+        type:String,
+        enum:["student","mentor","mod"],
+        default:"student",
+        required:true,
+    },
     phone_number:{
         type:Number,
         required:true,

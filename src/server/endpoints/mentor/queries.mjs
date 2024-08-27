@@ -40,7 +40,10 @@ queries_router.post('/:id',async (req,res)=>{
 //GET: /mentor/queries - Get all queries that are available
 queries_router.get('/',async (req,res)=>{
     try{
-        const queries=await Query.find();
+        const queries=await Query.find().populate({
+            path:'student',
+            select:'name kerberos phone_number'
+        });
         res.status(200).send(queries);
     }catch(e){
         res

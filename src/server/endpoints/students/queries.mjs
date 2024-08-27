@@ -49,7 +49,7 @@ queries_router.post("/create", config, async (req, res) => {
     });
 
     await query.save();
-    res.status(201).send(query);
+    res.status(200).send(query);
   } catch (e) {
     console.error("Error during file upload and save:", e);
     res.status(500).send("Internal server error");
@@ -72,6 +72,9 @@ queries_router.get("/one", async (req, res) => {
     const queries = await Query.find({
       student: student._id,
       _id: new ObjectId(qid),
+    }).populate({
+      path: "mentor",
+      select: "kerberos phone_number course ",
     });
     if (queries.length == 0) {
       res.status(400).send("Query not found");
@@ -91,7 +94,10 @@ queries_router.get("/", async (req, res) => {
       res.status(400).send("Student not found");
       return;
     }
-    const queries = await Query.find({ student: student._id });
+    const queries = await Query.find({ student: student._id }).populate({
+      path: "mentor",
+      select: "kerberos phone_number course ",
+    });
     res.status(200).send(queries);
   } catch (e) {
     res.status(500).send(e);

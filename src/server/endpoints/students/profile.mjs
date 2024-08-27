@@ -46,7 +46,7 @@ profile_router.post("/create", async (req, res) => {
       phone_number: req.body.phone_number,
     });
     await student.save();
-    res.status(201).send(student);
+    res.status(200).send(student);
   } catch (e) {
     res.status(500).send(e);
   }

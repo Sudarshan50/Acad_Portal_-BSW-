@@ -43,6 +43,8 @@ import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import axios from "axios";
 import { toast } from "react-toastify";
 import formatTimestamp from "./time_formatter";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { red } from "@mui/material/colors";
 function createData(id, name, calories, fat, carbs, protein) {
   return {
     id,
@@ -240,7 +242,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
   const handledelete = async () => {
     try {
       const res = await axios.delete(
-        `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/student/queries/delete/${row._id}`,
+        `http://localhost:3001/api/student/queries/delete/${row._id}`,
         {
           data: { kerberos: Cookies.get("kerberos") },
         }
@@ -356,55 +358,71 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
                 </Button>
               </Box>
             ) : null}
-
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                Info
-              </Typography>
-
-              {row.feedback && (
-                <Typography variant="subtitle1" gutterBottom component="div">
-                  <strong>Feedback:</strong> {"New Feedback"}
+            {console.log(row)}
+            <Box sx={{ margin: 1, display: "flex", flexDirection: "row" }}>
+              <Box sx={{ margin: 2 }}>
+                <Typography variant="h6" fontWeight="bold" gutterBottom component="div">
+                  Query Quick View
                 </Typography>
-              )}
-              <Typography variant="subtitle1" gutterBottom component="div">
-                <strong>Description:</strong> {row.description}
-              </Typography>
-              {row.attachments.length !== 0 && (
-                <Box position="relative" display="inline-block">
-                  {/* <IconButton
-                    aria-label="View attachment"
-                    onClick={() => {
-                      openDialog();
-                    }}
-                    style={{
-                      position: "absolute",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      zIndex: 1,
-                    }}
-                  >
-                    <RemoveRedEyeIcon />
-                  </IconButton> */}
-                  {console.log(row.attachments)}
-                  {row.attachments.map((attachment, index) => (
-                    <img
-                      key={index}
-                      src={attachment}
-                      alt="Attachment"
-                      style={{
-                        width: "60px",
-                        height: "60px",
-                        zIndex: 0,
-                        display: "inline-block",
-                        padding: "10px",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ))}
+                {row.feedback && (
+                  <Typography variant="subtitle1" gutterBottom component="div">
+                    <strong>Feedback:</strong> {"New Feedback"}
+                  </Typography>
+                )}
+                <Typography variant="subtitle1" gutterBottom component="div">
+                  <strong>Description:</strong> {row.description}
+                </Typography>
+                {row.attachments.length !== 0 && (
+                  <Box position="relative" display="inline-block">
+                    {console.log(row.attachments)}
+                    {row.attachments.map((attachment, index) => (
+                      <img
+                        key={index}
+                        src={attachment}
+                        alt="Attachment"
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          zIndex: 0,
+                          display: "inline-block",
+                          padding: "10px",
+                          objectFit: "cover",
+                        }}
+                      />
+                    ))}
+                    <Typography variant="body2" fontWeight="bold" color="red">
+                      Note:- To view the image right click on it and open in new
+                      tab.
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+              {row.status === "RESOLVED" ||
+              row.status === "REJECTED" ||
+              row.status === "APPROVED" ||
+              row.status === "TAKEN" ? (
+                <Box sx={{ margin: 4 }}>
+                  <Typography variant="h6" gutterBottom component="div">
+                    Mentor Info: {(row.mentor?.kerberos).toUpperCase()}
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom component="div">
+                    <strong>Name:</strong> {row?.mentor_name}
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom component="div">
+                    <strong>Contact:</strong> {row.mentor?.phone_number}
+                  </Typography>
+                  {row.status === "RESOLVED" || row.status === "APPROVED" ? (
+                    <Typography
+                      variant="subtitle1"
+                      gutterBottom
+                      component="div"
+                    >
+                      <strong>Resolved At:</strong>{" "}
+                      {formatTimestamp(row?.resolved_at)}
+                    </Typography>
+                  ) : null}
                 </Box>
-              )}
-              {/* Rest of the content */}
+              ) : null}
             </Box>
           </Collapse>
         </TableCell>

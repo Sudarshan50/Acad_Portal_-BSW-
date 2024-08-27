@@ -27,18 +27,24 @@ const FloatOpportunity = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    toast.info("Please wait while we float the opportunity");
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/opportunity/post",
+        "http://localhost:3001/api/mentor/opportunity/post",
         {
           kerberos: Cookies.get("kerberos"),
           title: title,
           description: description,
           end: endDateTime,
           course: course,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
         }
       );
-      if (res.status === 201) {
+      if (res.status === 200) {
         setTitle("");
         setDescription("");
         // setStartDateTime("");

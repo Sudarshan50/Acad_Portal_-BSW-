@@ -5,9 +5,14 @@ import { toast } from "react-toastify";
 export const handleApproveQuery = async (id) => {
   try {
     const res = await axios.post(
-      `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/make_available/${id}`,
+      `http://localhost:3001/api/moderator/queries/make_available/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("auth_token"),
+        },
       }
     );
     if (res.status === 200) {
@@ -21,9 +26,14 @@ export const handleApproveQuery = async (id) => {
 export const handleRejectQuery = async (id) => {
   try {
     const res = await axios.post(
-      `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/dismiss/${id}`,
+      `http://localhost:3001/api/moderator/queries/dismiss/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("auth_token"),
+        },
       }
     );
     if (res.status === 200) {
@@ -37,10 +47,15 @@ export const handleRejectQuery = async (id) => {
 export const handleApproveAttendance = async (id, hours) => {
   try {
     const res = await axios.post(
-      `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/attendance/approve/${id}`,
+      `http://localhost:3001/api/moderator/attendance/approve/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
         hours: hours,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("auth_token"),
+        },
       }
     );
     if (res.status === 200) {
@@ -54,9 +69,14 @@ export const handleApproveAttendance = async (id, hours) => {
 export const handleRejectAttendance = async (id) => {
   try {
     const res = await axios.post(
-      `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/attendance/disapprove/${id}`,
+      `http://localhost:3001/api/moderator/attendance/disapprove/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("auth_token"),
+        },
       }
     );
     if (res.status === 200) {
@@ -70,10 +90,15 @@ export const handleRejectAttendance = async (id) => {
 export const approveResolved = async (id, hours) => {
   try {
     const res = await axios.post(
-      `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/approve_resolve/${id}`,
+      `http://localhost:3001/api/moderator/queries/approve_resolve/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
         hours: hours,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("auth_token"),
+        },
       }
     );
     if (res.status === 200) {
@@ -85,19 +110,23 @@ export const approveResolved = async (id, hours) => {
   }
 };
 export const rejectResolved = async (id) => {
-  try{
+  try {
     const res = await axios.post(
-      `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/queries/reject_resolve/${id}`,
+      `http://localhost:3001/api/moderator/queries/reject_resolve/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + Cookies.get("auth_token"),
+        },
       }
     );
     if (res.status === 200) {
       toast.success("Query Rejected");
     }
-  }catch(err)
-  {
+  } catch (err) {
     console.log(err);
     toast.error("Server Error!");
   }
-}
+};

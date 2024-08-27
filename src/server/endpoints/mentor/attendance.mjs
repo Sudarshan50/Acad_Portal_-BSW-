@@ -35,14 +35,16 @@ router.post("/post", config, async (req, res) => {
       return res.status(400).send("Mentor not found");
     }
     const uploadedFiles = req.files?.photo;
-    // console.log(uploadedFiles);
+    if (!uploadedFiles) {
+      return res.status(400).send("No file uploaded");
+    }
     const fileUploads = [];
     const filesArray = Array.isArray(uploadedFiles)
       ? uploadedFiles
       : [uploadedFiles];
 
     for (const file of filesArray) {
-      const filePath = file.path; 
+      const filePath = file.path;
 
       // Upload to Cloudinary
       const uploadPromise = cloudinary.uploader.upload(filePath, {
@@ -63,7 +65,7 @@ router.post("/post", config, async (req, res) => {
       photoPath: fileUrls,
     });
     await attendance.save();
-    res.status(201).send(attendance);
+    res.status(200).send(attendance);
     // If there's a file, rename it using the unique ID
   } catch (e) {
     console.log(e);

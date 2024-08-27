@@ -54,13 +54,21 @@ export default function JoySignInSideTemplate() {
       password: formElements.password.value,
     };
     try {
-      const res = await axios.post("https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/moderator/auth/login", data);
-      if(res.status === 201)
-      {
+      const res = await axios.post(
+        "http://localhost:3001/api/moderator/auth/login",
+        data
+      );
+      if (res.status === 200) {
         toast.success("Logged in successfully");
-        Cookies.set("token", res.data.token, { expires: 1 / 24 });
-        Cookies.set("kerberos", formElements.kerberos.value, { expires: 1 / 24 });
-        Cookies.set('mentId', res.data._id, { expires: 1 / 24 });
+        Cookies.set("auth_token", res.data.token, {
+          expires: 1 / 24,
+          sameSite: "strict",
+          secure: false,
+        });
+        Cookies.set("kerberos", formElements.kerberos.value, {
+          expires: 1 / 24,
+        });
+        Cookies.set("mentId", res.data._id, { expires: 1 / 24 });
         navigator("/mod/");
       }
     } catch (error) {
@@ -175,7 +183,7 @@ export default function JoySignInSideTemplate() {
                 //     kerberos: formElements.kerberos.value,
                 //     password: formElements.password.value,
                 //   };
-                //   fetch("https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/login",{
+                //   fetch("http://localhost:3001/api/login",{
                 //     method: 'POST',
                 //     headers: {
                 //       'Content-Type': 'application/json',

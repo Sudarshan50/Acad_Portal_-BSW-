@@ -22,26 +22,30 @@ const MarkAttendance = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //extract form data...
+    toast.info("Please wait while we mark your attendance");
     const formData = new FormData();
     formData.append("date", date);
     formData.append("description", discussion);
     formData.append("kerberos", Cookies.get("kerberos"));
     formData.append("photo", photo);
+    console.log(date);
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/mentor/attendance/post",
+        "http://localhost:3001/api/mentor/attendance/post",
         formData,
-        { headers: "Content-Type:multipart/form-data" }
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
       );
-      if (res.status === 201) {
+      if (res.status === 200) {
         setDate("");
         setDiscussion("");
         setPhoto([]);
         navigate("/mentor/dashboard");
         toast.success("Attendance marked successfully");
-      } else {
-        toast.warn("Size of photo should be less than 50KB");
       }
     } catch (err) {
       console.log(err);

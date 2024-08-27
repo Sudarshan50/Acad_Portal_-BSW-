@@ -43,8 +43,21 @@ const ModActionAwaitedQuery = (props) => {
               {props.sItem?.description}
             </Typography>
             <Typography id="modal-description" sx={{ mt: 2 }}>
+              Queried by: {props.sItem?.student}
+            </Typography>
+            <Typography id="modal-description" sx={{ mt: 2 }}>
               Status: {props.sItem?.status}
             </Typography>
+            {props.sItem?.status === "RESOLVED" && (
+              <>
+                <Typography id="modal-description" sx={{ mt: 2 }}>
+                  Feedback: {props.sItem?.feedback}
+                </Typography>
+                <Typography id="modal-description" sx={{ mt: 2 }}>
+                  Resolved By: {props.sItem?.mentor_name}
+                </Typography>
+              </>
+            )}
             {props.sItem?.attachments?.length ? (
               <Box mt={2}>
                 <Typography id="modal-description" sx={{ mt: 2 }}>
@@ -146,7 +159,11 @@ const ModActionAwaitedQuery = (props) => {
                 </Box>
               </>
             ) : null}
-            <Typography variant="body2" id = "modal-disclaimer" sx={{ mt: 2, fontWeight:"bold" }}>
+            <Typography
+              variant="body2"
+              id="modal-disclaimer"
+              sx={{ mt: 2, fontWeight: "bold" }}
+            >
               Note: To view image right click on the image and open in new tab.
             </Typography>
           </>

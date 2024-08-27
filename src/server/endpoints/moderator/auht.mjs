@@ -1,6 +1,7 @@
 import e from "express";
 import bcrypt from "bcryptjs";
 import Moderator from "../../models/moderator.mjs";
+import jwt from "jsonwebtoken";
 
 const router = e.Router();
 
@@ -15,7 +16,7 @@ router.post("/register", async (req, res) => {
     const hashpass = await bcrypt.hash(password, 10);
     newMod.password = hashpass;
     await newMod.save();
-    return res.status(201).send(newMod);
+    return res.status(200).send(newMod);
   } catch (err) {
     console.log(err);
   }
@@ -32,7 +33,14 @@ router.post("/login", async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid kerberos or password" });
     }
-    return res.status(201).send(mod);
+    const token = jwt.sign(
+      { id: mod._id, role: mod.role },
+      process.env.APP_SECRET,
+      {
+        expiresIn: "1h",
+      }
+    );
+    return res.status(200).json({ token, mod });
   } catch (err) {
     console.log(err);
   }
