@@ -19,8 +19,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const Mentors = () => {
-  const [mentor, setMentor] = useState([]);
+const Students = () => {
+  const [stud, setStud] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -29,7 +29,7 @@ const Mentors = () => {
   const fetchMentor = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:3001/api/moderator/admin/mentor/view/",
+        "http://localhost:3001/api/moderator/admin/student/view/",
         {
           headers: {
             Authorization: "Bearer " + Cookies.get("auth_token"),
@@ -37,7 +37,7 @@ const Mentors = () => {
         }
       );
       if (res.status === 200) {
-        setMentor(res.data.mentors);
+        setStud(res.data.students);
         // console.log(res.data.mentors);
       }
     } catch (err) {
@@ -61,7 +61,7 @@ const Mentors = () => {
 
       <div style={{ paddingTop: 64, paddingLeft: 20, paddingRight: 20 }}>
         <Typography variant="h4" gutterBottom style={{ marginTop: "20px" }}>
-          Mentors
+          Students
         </Typography>
         <TableContainer
           component={Paper}
@@ -71,24 +71,20 @@ const Mentors = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Course</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Hours</TableCell>
                 <TableCell>Profile</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {mentor?.map((mentor) => (
-                <TableRow key={mentor._id}>
-                  <TableCell>{mentor.name}</TableCell>
-                  <TableCell>{mentor.course}</TableCell>
-                  <TableCell>{`${mentor.kerberos}@iitd.ac.in`}</TableCell>
-                  <TableCell>{mentor.hours}</TableCell>
+              {stud?.map((student) => (
+                <TableRow key={student._id}>
+                  <TableCell>{student.name}</TableCell>
+                  <TableCell>{`${student.kerberos}@iitd.ac.in`}</TableCell>
                   <TableCell>
                     <Button
                       variant="contained"
                       color="primary"
-                      href={`profile/mentor/${mentor.kerberos}`}
+                      href={`profile/student/${student.kerberos}`}
                     >
                       View Profile
                     </Button>
@@ -103,4 +99,4 @@ const Mentors = () => {
   );
 };
 
-export default Mentors;
+export default Students;

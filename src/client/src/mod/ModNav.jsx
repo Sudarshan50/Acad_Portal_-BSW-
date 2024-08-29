@@ -27,38 +27,24 @@ import {
 } from "@heroicons/react/24/solid";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import bswLogo from "../assets/bswLogo.png";
 
 // profile menu component
 const profileMenuItems = [
-  //   {
-  //     label: "My Profile",
-  //     icon: UserCircleIcon,
-
-  //   },
   {
     label: "My Profile",
     icon: Cog6ToothIcon,
     action: () => {
-      window.location.href = "/mentor/profile";
+      window.location.href = "/mod/profile";
     },
-  },
-  {
-    label: "Inbox",
-    icon: InboxArrowDownIcon,
-  },
-  {
-    label: "Help",
-    icon: LifebuoyIcon,
   },
   {
     label: "Sign Out",
     icon: PowerIcon,
-    action: () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("kerberos");
-      Cookies.remove("token");
+    action: async() => {
+      window.location.href = "/mod";
+      Cookies.remove("auth_token");
       Cookies.remove("kerberos");
-      window.location.href = "/mentor/login";
     },
   },
 ];
@@ -132,11 +118,6 @@ const navListMenuItems = [
     link: "/mod/dashboard",
   },
   {
-    title: "All Mentor List",
-    description: "Find the information you need to make the right decisions.",
-    link: "/mod/mentors",
-  },
-  {
     title: "Main BSW Website",
     description: "Find the information you need to make the right decisions.",
     link: "https://bsw.iitd.ac.in/index.php",
@@ -188,12 +169,18 @@ function NavListMenu() {
         </MenuHandler>
         <MenuList className="hidden w-[36rem] grid-cols-7 gap-3 overflow-visible lg:grid">
           <Card
-            color="blue"
+            color="grey"
             shadow={false}
             variant="gradient"
             className="col-span-3 grid h-full w-full place-items-center rounded-md"
           >
-            <RocketLaunchIcon strokeWidth={1} className="h-28 w-28" />
+            <img
+              onClick={() => {
+                window.location.href = "https://bsw.iitd.ac.in/index.php";
+              }}
+              style={{ padding: "2px", marginLeft: "1.5em", cursor: "pointer" }}
+              src={bswLogo}
+            />
           </Card>
           <ul className="col-span-4 flex w-full flex-col gap-1">
             {renderItems}
@@ -214,18 +201,15 @@ function NavListMenu() {
 // nav list component
 const navListItems = [
   {
-    label: "Account",
+    label: "Mentors ",
     icon: UserCircleIcon,
-    href: "/mentor/profile",
+    href: "mentors",
   },
-  // {
-  //   label: "Blocks",
-  //   icon: CubeTransparentIcon,
-  // },
-  // {
-  //   label: "Docs",
-  //   icon: CodeBracketSquareIcon,
-  // },
+  {
+    label: "Students",
+    icon: UserCircleIcon,
+    href: "students",
+  },
 ];
 
 function NavList() {
@@ -256,7 +240,6 @@ export function MentNav() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   useEffect(() => {
-    // const token = localStorage.getItem("token");
     const token = Cookies.get("auth_token");
     if (token) {
       setIsLoggedIn(true);
@@ -273,40 +256,57 @@ export function MentNav() {
   }, []);
 
   return (
-    <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
-      <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-        <Typography
-          as="a"
-          href="https://bsw.iitd.ac.in/index.php"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
-        >
-          BSW
-        </Typography>
-        <div className="hidden lg:block">
-          <NavList />
-        </div>
-        <IconButton
-          size="sm"
-          color="blue-gray"
-          variant="text"
-          onClick={toggleIsNavOpen}
-          className="ml-auto mr-2 lg:hidden"
-        >
-          <Bars2Icon className="h-6 w-6" />
-        </IconButton>
-
-        {isLoggedIn === false ? (
-          <Button onClick = {()=>{
-            window.location.href = "/mod/login";
-          }}size="sm" variant="text">
-            <span>Log In</span>
-          </Button>
-        ) : null}
-        <ProfileMenu />
+    <>
+      <div style={{ position: "relative" }}>
+        <img
+          src="https://bsw.iitd.ac.in/images/bsw_logo.png"
+          style={{
+            height: "2em",
+            position: "absolute",
+            top: "0.9em",
+            left: "6rem",
+          }}
+        />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
-        <NavList />
-      </MobileNav>
-    </Navbar>
+      <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
+        <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
+          <Typography
+            as="a"
+            href="https://bsw.iitd.ac.in/index.php"
+            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
+          >
+            BSW
+          </Typography>
+          <div className="hidden lg:block">
+            <NavList />
+          </div>
+          <IconButton
+            size="sm"
+            color="blue-gray"
+            variant="text"
+            onClick={toggleIsNavOpen}
+            className="ml-auto mr-2 lg:hidden"
+          >
+            <Bars2Icon className="h-6 w-6" />
+          </IconButton>
+
+          {isLoggedIn === false ? (
+            <Button
+              onClick={() => {
+                window.location.href = "/mod/login";
+              }}
+              size="sm"
+              variant="text"
+            >
+              <span>Log In</span>
+            </Button>
+          ) : null}
+          <ProfileMenu />
+        </div>
+        <MobileNav open={isNavOpen} className="overflow-scroll">
+          <NavList />
+        </MobileNav>
+      </Navbar>
+    </>
   );
 }

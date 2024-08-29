@@ -207,7 +207,7 @@ export default function JoySignInSideTemplate() {
                 // }}
               >
                 <FormControl required>
-                  <FormLabel>kerberos</FormLabel>
+                  <FormLabel>Kerberos</FormLabel>
                   <Input type="kerberos" name="kerberos" />
                 </FormControl>
                 <FormControl required>
@@ -242,16 +242,11 @@ export default function JoySignInSideTemplate() {
                   </Button>
                 </Stack>
               </form>
-              <Stack gap={4} sx={{ mt: 2 }}>
-                <Typography level="body-sm">
-                  New to the portal? <Link to={"/register"}>Register</Link>
-                </Typography>
-              </Stack>
             </Stack>
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" textAlign="center">
-              © Your company {new Date().getFullYear()}
+              © BSW IIT Delhi {new Date().getFullYear()}
             </Typography>
           </Box>
         </Box>

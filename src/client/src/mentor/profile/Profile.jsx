@@ -7,6 +7,15 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import ApprovedActivities from "./ApprovedActivities";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import OtherActivities from "./OtherActivities";
 import { MentNav } from "../MentNav";
 import axios from "axios";
@@ -16,6 +25,7 @@ import Cookies from "js-cookie";
 const Profile = ({ isMod }) => {
   const [activeTab, setActiveTab] = useState("personal-info");
   const [personalInfo, setPersonalInfo] = useState({});
+  const [otherMentors, setOtherMentors] = useState([]);
   const [key, setKey] = useState({
     oldpassword: "",
     newPassword: "",
@@ -31,6 +41,7 @@ const Profile = ({ isMod }) => {
     fetchPersonalInfo();
     fetchApprovedActivities();
     fetchOtherActivities();
+    fetchOtherMentors();
   }, []);
 
   const fetchPersonalInfo = async () => {
@@ -61,6 +72,23 @@ const Profile = ({ isMod }) => {
     } catch (er) {
       console.log(er);
       toast.error("Error in fetching personal info");
+    }
+  };
+  const fetchOtherMentors = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3001/api/mentor/admin/mentors/view`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
+      );
+      if (res.status === 200) {
+        setOtherMentors(res.data.mentors);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -191,6 +219,16 @@ const Profile = ({ isMod }) => {
             >
               Other Activities
             </li>
+            <li
+              className={`p-4 cursor-pointer transition-colors duration-200 ${
+                activeTab === "view_other_mentors"
+                  ? "bg-gray-300 text-blue-600"
+                  : "hover:bg-gray-200"
+              }`}
+              onClick={() => setActiveTab("view_other_mentors")}
+            >
+              Mentors
+            </li>
           </ul>
         </div>
         {/* Content */}
@@ -270,6 +308,37 @@ const Profile = ({ isMod }) => {
               isMod={isMod}
               handleModAction={handleModAction}
             />
+          )}
+          {activeTab === "view_other_mentors" && (
+            <Card className="w-full mb-4">
+              <CardBody>
+                <TableContainer
+                  component={Paper}
+                  style={{ maxWidth: "100%", overflowX: "auto" }}
+                >
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Course</TableCell>
+                        <TableCell>Hours</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {otherMentors?.map((ment) => (
+                        <TableRow key={ment._id}>
+                          <TableCell>{ment.name}</TableCell>
+                          <TableCell>{`${ment.kerberos}@iitd.ac.in`}</TableCell>
+                          <TableCell>{ment.course}</TableCell>
+                          <TableCell>{ment.hours}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </CardBody>
+            </Card>
           )}
         </div>
       </div>

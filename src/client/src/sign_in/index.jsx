@@ -175,55 +175,15 @@ export default function JoySignInSideTemplate() {
               </Stack>
             </Stack>
             <Stack gap={4} sx={{ mt: 2 }}>
-              <form
-                onSubmit={(e) => handleSubmit(e)}
-                // onSubmit={(event) => {
-                //   event.preventDefault();
-                //   const formElements = event.currentTarget.elements;
-                //   const data = {
-                //     kerberos: formElements.kerberos.value,
-                //     password: formElements.password.value,
-                //   };
-                //   fetch("http://localhost:3001/api/login",{
-                //     method: 'POST',
-                //     headers: {
-                //       'Content-Type': 'application/json',
-                //     },
-                //     body: JSON.stringify(data),
-                //   }).then((response) => {
-                //     if (response.ok) {
-                //       toast.success('Logged in successfully');
-                //       return response.json();
-                //     }
-                //     toast.error('Invalid credentials');
-                //   }).then((data) => {
-                //     Cookies.set('token', data.token, { expires: 1/24 });
-                //     Cookies.set('kerberos', formElements.kerberos.value, { expires: 1/24 });
-                //     navigator('../student');
-                //   }
-                //   ).catch((error) => {
-                //     console.error('There has been a problem with your fetch operation:', error);
-                //   });
-                // }}
-              >
+              <form onSubmit={(e) => handleSubmit(e)}>
                 <FormControl required>
-                  <FormLabel>kerberos</FormLabel>
+                  <FormLabel>Kerberos</FormLabel>
                   <Input type="kerberos" name="kerberos" />
                 </FormControl>
                 <FormControl required>
                   <FormLabel>Password</FormLabel>
                   <Input type="password" name="password" />
                 </FormControl>
-                {/* <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={isStudent}
-                      onChange={(event) => setIsStudent(event.target.checked)}
-                      name="isStudent"
-                    />
-                  }
-                  label="I am a student"
-                /> */}
                 <Stack gap={4} sx={{ mt: 2 }}>
                   <Box
                     sx={{
@@ -251,7 +211,7 @@ export default function JoySignInSideTemplate() {
           </Box>
           <Box component="footer" sx={{ py: 3 }}>
             <Typography level="body-xs" textAlign="center">
-              © Your company {new Date().getFullYear()}
+              © BSW IIT Delhi {new Date().getFullYear()}
             </Typography>
           </Box>
         </Box>

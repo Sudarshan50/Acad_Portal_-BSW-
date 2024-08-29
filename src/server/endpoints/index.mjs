@@ -88,6 +88,13 @@ router.post("/login", async (req, res) => {
   );
   res.json({ message: "Logged in successfully", token, status: "verified" });
 });
+router.get("/checkLog", checkAuth, async (req, res) => {
+  try {
+    res.status(200).json({ message: "Authenticated" });
+  } catch (err) {
+    res.status(500).send("Not authenticated");
+  }
+});
 
 router.get("/verify/:token", async (req, res) => {
   try {

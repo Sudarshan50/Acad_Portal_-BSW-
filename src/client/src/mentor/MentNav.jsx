@@ -41,11 +41,9 @@ const profileMenuItems = [
     label: "Sign Out",
     icon: PowerIcon,
     action: () => {
-      localStorage.removeItem("token");
-      localStorage.removeItem("kerberos");
-      Cookies.remove("token");
+      window.location.href = "/mentor";
+      Cookies.remove("auth_token");
       Cookies.remove("kerberos");
-      window.location.href = "/mentor/login";
     },
   },
 ];
@@ -203,9 +201,9 @@ function NavListMenu() {
 // nav list component
 const navListItems = [
   {
-    label: "Account",
+    label: "Students",
     icon: UserCircleIcon,
-    href: "/mentor/profile",
+    href: "profile/students",
   },
 ];
 
@@ -254,6 +252,18 @@ export function MentNav() {
   }, []);
 
   return (
+    <>
+    <div style={{position:"relative"}}>
+    <img
+        src="https://bsw.iitd.ac.in/images/bsw_logo.png"
+        style={{
+          height: "2em",
+          position: "absolute",
+          top: "0.9em",
+          left: "6rem",
+        }}
+      />
+    </div>
     <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
@@ -287,5 +297,6 @@ export function MentNav() {
         <NavList />
       </MobileNav>
     </Navbar>
+    </>
   );
 }

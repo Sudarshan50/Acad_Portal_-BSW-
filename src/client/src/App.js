@@ -7,6 +7,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Mentor from "./mentor";
 import Mod from "./mod";
+import Sign1 from "./mentor/Auth"
+import Sign2 from "./mod/Auth"
 
 function PrivateRoute({ children }) {
   const location = useLocation();
@@ -23,6 +25,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/mentor" element={<Sign1 />} />
+        <Route path="/mod" element={<Sign2 />} />
         <Route
           path="student/*"
           element={

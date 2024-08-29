@@ -14,13 +14,13 @@ import {
   IconButton,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { MentNav } from "./ModNav";
+import {MentNav} from "./MentNav";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const Mentors = () => {
-  const [mentor, setMentor] = useState([]);
+const Student = () => {
+  const [stud, setStud] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
@@ -29,7 +29,7 @@ const Mentors = () => {
   const fetchMentor = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:3001/api/moderator/admin/mentor/view/",
+        "http://localhost:3001/api/mentor/admin/student/view/",
         {
           headers: {
             Authorization: "Bearer " + Cookies.get("auth_token"),
@@ -37,7 +37,7 @@ const Mentors = () => {
         }
       );
       if (res.status === 200) {
-        setMentor(res.data.mentors);
+        setStud(res.data.students);
         // console.log(res.data.mentors);
       }
     } catch (err) {
@@ -61,7 +61,7 @@ const Mentors = () => {
 
       <div style={{ paddingTop: 64, paddingLeft: 20, paddingRight: 20 }}>
         <Typography variant="h4" gutterBottom style={{ marginTop: "20px" }}>
-          Mentors
+          All Students
         </Typography>
         <TableContainer
           component={Paper}
@@ -71,24 +71,22 @@ const Mentors = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell>Course</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Hours</TableCell>
+                <TableCell>Phone Number</TableCell>
                 <TableCell>Profile</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {mentor?.map((mentor) => (
-                <TableRow key={mentor._id}>
-                  <TableCell>{mentor.name}</TableCell>
-                  <TableCell>{mentor.course}</TableCell>
-                  <TableCell>{`${mentor.kerberos}@iitd.ac.in`}</TableCell>
-                  <TableCell>{mentor.hours}</TableCell>
+              {stud?.map((students) => (
+                <TableRow key={students._id}>
+                  <TableCell>{students.name}</TableCell>
+                  <TableCell>{`${students.kerberos}@iitd.ac.in`}</TableCell>
+                  <TableCell>{students.phone_number}</TableCell>
                   <TableCell>
                     <Button
                       variant="contained"
                       color="primary"
-                      href={`profile/mentor/${mentor.kerberos}`}
+                      href={`student/${students.kerberos}`}
                     >
                       View Profile
                     </Button>
@@ -103,4 +101,4 @@ const Mentors = () => {
   );
 };
 
-export default Mentors;
+export default Student;
