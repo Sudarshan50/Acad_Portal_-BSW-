@@ -25,10 +25,10 @@ const ModActionAwaitedAttendance = (props) => {
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Paper sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600 }}>
+      <Paper sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600 ,maxHeight: 800 ,overflow:"scroll"}}>
         {props?.sItem && (
           <>
-            <Typography id="modal-title" variant="h6" component="h2">
+            <Typography  id="modal-title" variant="h6" component="h2">
               {props.sItem?.description}
             </Typography>
             <Typography id="modal-status" sx={{ mt: 2 }}>

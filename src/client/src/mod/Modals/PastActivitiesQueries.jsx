@@ -31,7 +31,7 @@ const PastActivitiesDismissQuery = (props) => {
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Paper sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600 }}>
+      <Paper sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600,maxHeight: 800 ,overflow:"scroll" }}>
         {props?.sItem && (
           <>
             <Typography id="modal-title" variant="h6" component="h2">

@@ -14,7 +14,6 @@ const MentorProfile = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const { kerberos } = useParams();
-  console.log(kerberos);
 
   useEffect(() => {
     // Fetch mentor data from the API

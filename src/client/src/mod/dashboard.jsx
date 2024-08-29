@@ -133,7 +133,7 @@ const Dashboard = () => {
                 modQueries.queries.map((query) => (
                   <Card key={query._id} sx={{ minWidth: 275 }}>
                     <CardContent>
-                      <Typography variant="h6">{query.description}</Typography>
+                      <Typography variant="h6">{(query.description).substring(0,50)}..</Typography>
                       <Typography color="text.secondary">
                         State: {query.status}
                       </Typography>
@@ -162,7 +162,7 @@ const Dashboard = () => {
                   <Card key={attendance._id} sx={{ minWidth: 275 }}>
                     <CardContent>
                       <Typography variant="h6">
-                        {attendance.description}
+                        {(attendance.description.substring(0,50))}..
                       </Typography>
                       <Typography color="text.secondary">
                         State: {attendance.status}
@@ -208,7 +208,7 @@ const Dashboard = () => {
               ongoingActivities.queries.map((queries) => (
                 <Card key={queries._id} sx={{ minWidth: 275 }}>
                   <CardContent>
-                    <Typography variant="h6">{queries.description}</Typography>
+                    <Typography variant="h6">{(queries.description)?.substring(0,50)}..</Typography>
                     <Typography color="text.secondary">
                       State: {queries.status}
                     </Typography>
@@ -246,7 +246,7 @@ const Dashboard = () => {
               ongoingActivities.opportunities.map((opportunities) => (
                 <Card key={opportunities._id} sx={{ minWidth: 275 }}>
                   <CardContent>
-                    <Typography variant="h6">{opportunities.title}</Typography>
+                    <Typography variant="h6">{(opportunities.title).substring(0,50)}..</Typography>
                     <Typography color="text.secondary">
                       State: {opportunities.state}
                     </Typography>
@@ -289,7 +289,7 @@ const Dashboard = () => {
               pastActivities.queries.map((queries) => (
                 <Card key={queries._id} sx={{ minWidth: 275 }}>
                   <CardContent>
-                    <Typography variant="h6">{queries.description}</Typography>
+                    <Typography variant="h6">{(queries.description).substring(0,50)}...</Typography>
                     <Typography color="text.secondary">
                       State: {queries.status}
                     </Typography>
@@ -327,7 +327,7 @@ const Dashboard = () => {
               pastActivities.opportunities.map((opportunities) => (
                 <Card key={opportunities._id} sx={{ minWidth: 275 }}>
                   <CardContent>
-                    <Typography variant="h6">{opportunities.title}</Typography>
+                    <Typography variant="h6">{(opportunities.title).substring(0,50)}...</Typography>
                     <Typography color="text.secondary">
                       State: {opportunities.state}
                     </Typography>
@@ -367,7 +367,7 @@ const Dashboard = () => {
                 <Card key={attendace._id} sx={{ minWidth: 275 }}>
                   <CardContent>
                     <Typography variant="h6">
-                      {attendace.description}
+                      {(attendace.description).substring(0,50)}..
                     </Typography>
                     <Typography color="text.secondary">
                       {attendace.status}

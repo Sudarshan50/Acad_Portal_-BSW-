@@ -204,13 +204,13 @@ const Dashboard = () => {
                   </Typography>
                 </>
               )}
-            <Button
+            {/* <Button
               style={{ padding: "15px", marginTop: "1em" }}
               variant="contained"
               onClick={() => navigate(`/mentor/view_query/${selectedItem._id}`)}
             >
               View Query
-            </Button>
+            </Button> */}
           </>
         );
       case "availableQuery":
@@ -264,13 +264,13 @@ const Dashboard = () => {
             >
               Take Up
             </Button>
-            <Button
+            {/* <Button
               style={{ padding: "15px" }}
               variant="contained"
               onClick={() => navigate(`/mentor/view_query/${selectedItem._id}`)}
             >
               View Query
-            </Button>
+            </Button> */}
           </>
         );
       case "floatedOpportunity":
@@ -382,7 +382,7 @@ const Dashboard = () => {
                   onClick={() => handleOpen({ ...query, type: "takenQuery" })}
                 >
                   <ListItemText
-                    primary={`[${query.type}]: ${query.description}`}
+                    primary={`[${query.type}]: ${(query.description)?.substring(0, 100)}...`}
                   />
                 </ListItem>
               ))
@@ -419,7 +419,7 @@ const Dashboard = () => {
                   }
                 >
                   <ListItemText
-                    primary={`[${query.type}]: ${query.description}`}
+                    primary={`[${query.type}]: ${(query.description)?.substring(0, 100)}...`}
                   />
                 </ListItem>
               ))
@@ -456,7 +456,7 @@ const Dashboard = () => {
                   }
                 >
                   <ListItemText
-                    primary={`[${opportunity.course}]: ${opportunity.description}`}
+                    primary={`[${opportunity.course}]: ${(opportunity.description)?.substring(0, 100)}...`}
                   />
                 </ListItem>
               ))
@@ -493,7 +493,7 @@ const Dashboard = () => {
                   }
                 >
                   <ListItemText
-                    primary={`[${opportunity.course}]: ${opportunity.description}`}
+                    primary={`[${opportunity.course}]: ${(opportunity.description)?.substring(0, 100)}...`}
                   />
                 </ListItem>
               ))
@@ -506,12 +506,14 @@ const Dashboard = () => {
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
+            maxWidth:600,
+            maxHeight: 800,
+            overflow: "scroll",
             overflowBlock: "scroll",
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: 400,
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,

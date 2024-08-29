@@ -93,13 +93,13 @@ const StudentProfile = () => {
                 >
                   {query.status}
                 </p>
-                <Button
+                {/* <Button
                   className="ml-auto"
                   size="sm"
                   // onClick={() => caller(query._id)}
                 >
                   View Details
-                </Button>
+                </Button> */}
               </ListItem>
             ))}
           </List>
