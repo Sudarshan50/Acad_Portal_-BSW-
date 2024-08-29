@@ -30,7 +30,7 @@ const FloatOpportunity = () => {
     toast.info("Please wait while we float the opportunity");
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/mentor/opportunity/post",
+        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/post",
         {
           kerberos: Cookies.get("kerberos"),
           title: title,

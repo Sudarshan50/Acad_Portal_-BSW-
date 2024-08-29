@@ -64,7 +64,7 @@ const QueryFeedback = () => {
       kerberos: Cookies.get("kerberos"),
     };
     fetch(
-      "http://localhost:3001/api/student/queries/resolve/" +
+      "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/resolve/" +
         qid,
       {
         method: "PATCH",

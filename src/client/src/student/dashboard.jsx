@@ -31,11 +31,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }
@@ -70,11 +70,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `http://localhost:3001/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }

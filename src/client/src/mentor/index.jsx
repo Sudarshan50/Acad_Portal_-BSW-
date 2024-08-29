@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import SignIn from "./Auth";
 import Dashboard from "./Dashboard";
 import MarkAttendance from "./MarkAttendance";
 import FloatOpportunity from "./FloatOppurtunity";

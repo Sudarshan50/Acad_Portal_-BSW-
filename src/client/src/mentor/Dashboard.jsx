@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   const fetchQueries = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/api/mentor/queries/", {
+      const res = await axios.get("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries/", {
         headers: {
           Authorization: `Bearer ${Cookies.get("auth_token")}`,
         },
@@ -52,7 +52,7 @@ const Dashboard = () => {
   const fetchOpportunities = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/api/mentor/opportunity/`,
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,
@@ -69,7 +69,7 @@ const Dashboard = () => {
   const fetchMentorId = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/api/mentor/auth/details/${Cookies.get(
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/auth/details/${Cookies.get(
           "kerberos"
         )}`,
         {
@@ -105,7 +105,7 @@ const Dashboard = () => {
     console.log(selectedItem);
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/mentor/queries/${selectedItem._id}`,
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
         },
@@ -129,7 +129,7 @@ const Dashboard = () => {
   const handleTakeOppurtunity = async () => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/api/mentor/opportunity/take/${selectedItem._id}`,
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/take/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
         },

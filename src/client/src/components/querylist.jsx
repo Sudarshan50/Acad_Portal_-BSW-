@@ -242,7 +242,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
   const handledelete = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:3001/api/student/queries/delete/${row._id}`,
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/delete/${row._id}`,
         {
           data: { kerberos: Cookies.get("kerberos") },
         }

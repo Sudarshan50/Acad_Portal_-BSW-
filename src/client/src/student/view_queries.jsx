@@ -63,7 +63,7 @@ const ViewQueries = () => {
       navigate("/student");
     }
     fetch(
-      "http://localhost:3001/api/student/queries/one?qid=" +
+      "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/one?qid=" +
         encodeURIComponent(qid) +
         "&kerberos=" +
         encodeURIComponent(Cookies.get("kerberos")),

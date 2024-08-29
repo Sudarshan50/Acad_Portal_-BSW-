@@ -54,7 +54,7 @@ export default function JoySignInSideTemplate() {
       password: formElements.password.value,
     };
     try {
-      const res = await axios.post(`http://localhost:3001/api/login`, data);
+      const res = await axios.post(`https://acadbackend-git-main-bswiitdelhi.vercel.app/api/login`, data);
       if (res.data.status === "unverified") {
         toast.error("Please verify your account to login");
         toast.warn("Please check your webmail to verify your account 📧");

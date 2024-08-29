@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 export const handleApproveQuery = async (id) => {
   try {
     const res = await axios.post(
-      `http://localhost:3001/api/moderator/queries/make_available/${id}`,
+      `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/queries/make_available/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
       },
@@ -26,7 +26,7 @@ export const handleApproveQuery = async (id) => {
 export const handleRejectQuery = async (id) => {
   try {
     const res = await axios.post(
-      `http://localhost:3001/api/moderator/queries/dismiss/${id}`,
+      `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/queries/dismiss/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
       },
@@ -47,7 +47,7 @@ export const handleRejectQuery = async (id) => {
 export const handleApproveAttendance = async (id, hours) => {
   try {
     const res = await axios.post(
-      `http://localhost:3001/api/moderator/attendance/approve/${id}`,
+      `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/attendance/approve/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
         hours: hours,
@@ -69,7 +69,7 @@ export const handleApproveAttendance = async (id, hours) => {
 export const handleRejectAttendance = async (id) => {
   try {
     const res = await axios.post(
-      `http://localhost:3001/api/moderator/attendance/disapprove/${id}`,
+      `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/attendance/disapprove/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
       },
@@ -90,7 +90,7 @@ export const handleRejectAttendance = async (id) => {
 export const approveResolved = async (id, hours) => {
   try {
     const res = await axios.post(
-      `http://localhost:3001/api/moderator/queries/approve_resolve/${id}`,
+      `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/queries/approve_resolve/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
         hours: hours,
@@ -112,7 +112,7 @@ export const approveResolved = async (id, hours) => {
 export const rejectResolved = async (id) => {
   try {
     const res = await axios.post(
-      `http://localhost:3001/api/moderator/queries/reject_resolve/${id}`,
+      `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/queries/reject_resolve/${id}`,
       {
         kerberos: Cookies.get("kerberos"),
       },

@@ -36,7 +36,7 @@ const Profile = () => {
 
   const fetchOtherMods = async () => {
     try{
-        const res = await axios.get(`http://localhost:3001/api/moderator/admin/mod/view/`,{
+        const res = await axios.get(`https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/admin/mod/view/`,{
             headers: {
                 Authorization: "Bearer " + Cookies.get("auth_token"),
             }
@@ -55,7 +55,7 @@ const Profile = () => {
   const fetchPersonalInfo = async () => {
     try {
       const info = await axios.get(
-        `http://localhost:3001/api/moderator/admin/mod/view/${Cookies.get(
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/admin/mod/view/${Cookies.get(
           "kerberos"
         )}`,
         {

@@ -31,7 +31,7 @@ const MarkAttendance = () => {
     console.log(date);
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/mentor/attendance/post",
+        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/attendance/post",
         formData,
         {
           headers: {
