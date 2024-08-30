@@ -110,7 +110,16 @@ const ViewQueries = () => {
   return (
     <>
       {loading ? (
-        <CircularProgress />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress />
+        </div>
       ) : (
         <ThemeProvider theme={theme}>
           <MainContainer>

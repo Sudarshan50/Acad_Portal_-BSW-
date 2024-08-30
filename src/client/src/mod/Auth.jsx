@@ -48,18 +48,30 @@ export default function JoySignInSideTemplate() {
   const navigator = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Logging in...");
+
     const formElements = event.currentTarget.elements;
     const data = {
       kerberos: formElements.kerberos.value,
       password: formElements.password.value,
     };
+
     try {
       const res = await axios.post(
         "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/auth/login",
         data
       );
+
       if (res.status === 200) {
-        toast.success("Logged in successfully");
+        // Update the toast to show a success message
+        toast.update(toastId, {
+          render: "Logged in successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
+
         Cookies.set("auth_token", res.data.token, {
           expires: 1 / 24,
           sameSite: "strict",
@@ -68,7 +80,6 @@ export default function JoySignInSideTemplate() {
         Cookies.set("kerberos", formElements.kerberos.value, {
           expires: 1 / 24,
         });
-        Cookies.set("mentId", res.data._id, { expires: 1 / 24 });
         navigator("/mod/dashboard");
       }
     } catch (error) {
@@ -76,7 +87,13 @@ export default function JoySignInSideTemplate() {
         "There has been a problem with your fetch operation:",
         error
       );
-      toast.error("Invalid credentials");
+      // Update the toast to show an error message if the API call fails
+      toast.update(toastId, {
+        render: "Invalid credentials",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
   return (

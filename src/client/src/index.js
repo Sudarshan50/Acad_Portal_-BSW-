@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "@material-tailwind/react";
-import store from "./store/store";
 // import "@material-tailwind/react/tailwind.css";
 
 import { BrowserRouter } from "react-router-dom";
@@ -14,9 +13,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider>
-        <Provider store={store}>
           <App />
-        </Provider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>

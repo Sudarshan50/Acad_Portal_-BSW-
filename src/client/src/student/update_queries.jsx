@@ -75,6 +75,9 @@ const QueryForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Updating your query...");
+  
     const formData = new FormData();
     formData.append("kerberos", Cookies.get("kerberos"));
     formData.append("type", type);
@@ -82,6 +85,7 @@ const QueryForm = () => {
     Array.from(attachments).forEach((file) => {
       formData.append("attachments", file);
     });
+  
     try {
       console.log(id);
       let res = await axios.patch(
@@ -94,17 +98,33 @@ const QueryForm = () => {
           },
         }
       );
+  
       if (res.status === 401 || res.status === 403) {
-        toast.warn("Unauthorized");
+        // Update the toast to show a warning message for unauthorized access
+        toast.update(toastId, {
+          render: "Unauthorized access",
+          type: "warning",
+          isLoading: false,
+          autoClose: 5000,
+        });
         nav("/student");
-      }
-      if (res.status === 200) {
-        toast.success("Query updated successfully");
+      } else if (res.status === 200) {
+        toast.update(toastId, {
+          render: "Query updated successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
         nav("/student");
       }
     } catch (err) {
       console.log(err);
-      toast.error("Error updating query");
+      toast.update(toastId, {
+        render: "Error updating query",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
   useEffect(() => {

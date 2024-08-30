@@ -21,36 +21,38 @@ import { MentNav } from "../MentNav";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { activityHandler } from "./dataHandler";
+import { set } from "mongoose";
 
 const Profile = ({ isMod }) => {
   const [activeTab, setActiveTab] = useState("personal-info");
   const [personalInfo, setPersonalInfo] = useState({});
   const [otherMentors, setOtherMentors] = useState([]);
+  const [allQueries, setAllQueries] = useState([]);
+  const [allAttendances, setAllAttendances] = useState([]);
+  const [allOpportunities, setAllOpportunities] = useState([]);
+
   const [key, setKey] = useState({
     oldpassword: "",
     newPassword: "",
   });
-  const [approvedQueries, setApprovedQueries] = useState([]);
-  const [approvedAttendances, setApprovedAttendances] = useState([]);
-  const [resolvedQueries, setResolvedQueries] = useState([]);
-  const [rejectedQueries, setRejectedQueries] = useState([]);
-  const [expiredOpportunities, setExpiredOpportunities] = useState([]);
-  const [rejectedAttendances, setRejectedAttendances] = useState([]);
+  const [approvQueries, setApprovedQueries] = useState([]);
+  const [approvAttendances, setApprovedAttendances] = useState([]);
+  const [resolvQueries, setResolvedQueries] = useState([]);
+  const [rejectQueries, setRejectedQueries] = useState([]);
+  const [expirOpportunities, setExpiredOpportunities] = useState([]);
+  const [takenOpportunities, setTakenOpportunities] = useState([]);
+  const [rejectAttendances, setRejectedAttendances] = useState([]);
 
   useEffect(() => {
     fetchPersonalInfo();
-    fetchApprovedActivities();
-    fetchOtherActivities();
     fetchOtherMentors();
+    fetchAllAttendace();
+    fetchAllQueries();
+    fetchAllOpportunities();
   }, []);
 
   const fetchPersonalInfo = async () => {
-    // const info = {
-    //   name: "John Doe",
-    //   email: "john.doe@example.com",
-    //   phone: "123-456-7890",
-    //   department: "Computer Science",
-    // };
     try {
       const info = await axios.get(
         `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/auth/details/${Cookies.get(
@@ -91,53 +93,71 @@ const Profile = ({ isMod }) => {
       console.log(err);
     }
   };
-
-  const fetchApprovedActivities = async () => {
-    const queries = [{ type: "Query", info: "Query about React", hours: 5 }];
-    const attendances = [
-      { type: "Attendance", info: "Session on Node.js", hours: 2 },
-    ];
-    setApprovedQueries(queries);
-    setApprovedAttendances(attendances);
+  const fetchAllQueries = async () => {
+    try {
+      const res = await axios.get("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries/avquery/"+Cookies.get('kerberos'), {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("auth_token")}`,
+        },
+      });
+      if (res.status == 200) {
+        setAllQueries(res.data);
+      }
+    } catch (err) {
+      toast.error("Error fetching queries");
+      console.log(err);
+    }
   };
-
-  const fetchOtherActivities = async () => {
-    const resolvedQueries = [
-      {
-        type: "Query",
-        info: "Query about Python",
-        status: "RESOLVED",
-        modOption: "Approve/Reject",
-      },
-    ];
-    const rejectedQueries = [
-      {
-        type: "Query",
-        info: "Query about CSS",
-        status: "REJECTED",
-        modOption: "Change to Approved",
-      },
-    ];
-    const expiredOpportunities = [
-      {
-        type: "Opportunity",
-        info: "Expired JavaScript workshop",
-        status: "EXPIRED",
-      },
-    ];
-    const rejectedAttendances = [
-      {
-        type: "Attendance",
-        info: "Rejected session on C++",
-        status: "REJECTED",
-        modOption: "Change to Approved",
-      },
-    ];
-    setResolvedQueries(resolvedQueries);
-    setRejectedQueries(rejectedQueries);
-    setExpiredOpportunities(expiredOpportunities);
-    setRejectedAttendances(rejectedAttendances);
+  const fetchAllAttendace = async () => {
+    try {
+      const res = await axios.get(
+        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/attendance/"+Cookies.get("kerberos"),
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
+      );
+      if (res.status == 200) {
+        setAllAttendances(res.data);
+      }
+    } catch (err) {
+      toast.error("Error fetching attendance");
+      console.log(err);
+    }
   };
+  const fetchAllOpportunities = async () => {
+    try {
+      const res = await axios.get(
+        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/all",
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
+      );
+      if (res.status == 200) {
+        setAllOpportunities(res.data);
+      }
+    } catch (err) {
+      toast.error("Error fetching opportunities");
+      console.log(err);
+    }
+  };
+  const setData = ()=>{
+    let store = activityHandler(allQueries,allAttendances,allOpportunities);
+    setApprovedQueries(store.approvedQueries);
+    setApprovedAttendances(store.approvedAttendances);
+    setResolvedQueries(store.otherQueries);
+    setRejectedQueries(store.rejectedQueries);
+    setExpiredOpportunities(store.expiredOpportunities);
+    setTakenOpportunities(store.takenOpportunities);
+    setRejectedAttendances(store.rejectedAttendances);
+  }
+  useEffect(()=>{
+    setData();
+  },[allQueries,allAttendances,allOpportunities])
+  
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -254,6 +274,9 @@ const Profile = ({ isMod }) => {
                     <strong>Department:</strong>{" "}
                     {personalInfo.kerberos?.slice(0, 3).toUpperCase()}
                   </Typography>
+                  <Typography>
+                    <strong>Total Hours:</strong> {personalInfo.hours}
+                  </Typography>
                 </div>
               </CardBody>
             </Card>
@@ -295,16 +318,17 @@ const Profile = ({ isMod }) => {
           )}
           {activeTab === "approved-activities" && (
             <ApprovedActivities
-              queries={approvedQueries}
-              attendances={approvedAttendances}
+              queries={approvQueries}
+              attendances={approvAttendances}
             />
           )}
           {activeTab === "other-activities" && (
             <OtherActivities
-              resolvedQueries={resolvedQueries}
-              rejectedQueries={rejectedQueries}
-              expiredOpportunities={expiredOpportunities}
-              rejectedAttendances={rejectedAttendances}
+              resolvedQueries={resolvQueries}
+              rejectedQueries={rejectQueries}
+              expiredOpportunities={expirOpportunities}
+              takenOpportunities={takenOpportunities}
+              rejectedAttendances={rejectAttendances}
               isMod={isMod}
               handleModAction={handleModAction}
             />

@@ -48,19 +48,31 @@ export default function JoySignInSideTemplate() {
   const navigator = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Logging in...");
+  
     const formElements = event.currentTarget.elements;
     const data = {
       kerberos: formElements.kerberos.value,
       password: formElements.password.value,
     };
+  
     try {
       const res = await axios.post(
         "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/auth/login",
         data
       );
+  
       console.log(res);
+  
       if (res.status === 200) {
-        toast.success("Logged in successfully");
+        toast.update(toastId, {
+          render: "Logged in successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
+  
         Cookies.set("auth_token", res.data.token, {
           expires: 1 / 24,
           sameSite: "strict",
@@ -73,11 +85,13 @@ export default function JoySignInSideTemplate() {
         navigator("/mentor/dashboard");
       }
     } catch (error) {
-      console.error(
-        "There has been a problem with your fetch operation:",
-        error
-      );
-      toast.error("Invalid credentials");
+      console.error("There has been a problem with your fetch operation:", error);
+      toast.update(toastId, {
+        render: "Invalid credentials",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
   return (

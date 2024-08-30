@@ -30,9 +30,7 @@ const StudentProfile = ({ isMod }) => {
   const fetchPersonalInfo = async () => {
     try {
       const info = await axios.get(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/${Cookies.get(
-          "kerberos"
-        )}`,
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/${Cookies.get("kerberos")}`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,
@@ -54,10 +52,11 @@ const StudentProfile = ({ isMod }) => {
 
   const handleEditProfile = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading("Updating your profile...");
+
     try {
       let res = await axios.put(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/" +
-          Cookies.get("kerberos"),
+        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/" + Cookies.get("kerberos"),
         profile,
         {
           headers: {
@@ -66,7 +65,13 @@ const StudentProfile = ({ isMod }) => {
         }
       );
       if (res.status === 200) {
-        toast.success("Profile updated successfully");
+        toast.update(toastId, {
+          render: "Profile updated successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
+
         setProfile({
           name: "",
           phone_number: "",
@@ -74,14 +79,22 @@ const StudentProfile = ({ isMod }) => {
       }
     } catch (err) {
       console.log(err);
+      toast.update(toastId, {
+        render: "Error updating profile",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
+    const toastId = toast.loading("Changing your password...");
+  
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/studnet/profile/changePassword",
+        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/changePassword",
         {
           kerberos: Cookies.get("kerberos"),
           oldPassword: key.oldpassword,
@@ -93,8 +106,15 @@ const StudentProfile = ({ isMod }) => {
           },
         }
       );
+  
       if (res.status === 200) {
-        toast.success("Password changed successfully");
+        toast.update(toastId, {
+          render: "Password changed successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
+  
         setKey({
           oldpassword: "",
           newPassword: "",
@@ -102,7 +122,12 @@ const StudentProfile = ({ isMod }) => {
       }
     } catch (err) {
       console.log(err);
-      toast.warn("Please check if the old password is correct");
+      toast.update(toastId, {
+        render: "Please check if the old password is correct",
+        type: "warning",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
 

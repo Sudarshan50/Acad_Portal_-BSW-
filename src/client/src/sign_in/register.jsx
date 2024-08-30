@@ -20,7 +20,6 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-
 function ColorSchemeToggle(props) {
   const { onClick, ...other } = props;
   const { mode, setMode } = useColorScheme();
@@ -49,6 +48,9 @@ export default function JoyRegisterSideTemplate() {
   const navigator = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Signing up...");
+
     const formElements = event.currentTarget.elements;
     const data = {
       name: formElements.Name.value,
@@ -56,29 +58,31 @@ export default function JoyRegisterSideTemplate() {
       password: formElements.password.value,
       phone_number: formElements.phone.value,
     };
+
     try {
       const res = await axios.post(`https://acadbackend-git-main-bswiitdelhi.vercel.app/api/signup`, data);
+
       if (res.status === 200) {
+        toast.update(toastId, {
+          render: "Account created successfully!",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
+
         navigator("/");
         toast.warn("Please check your webmail to verify your account 📧");
       }
     } catch (err) {
-      toast.error(err.response.data.message);
+      toast.update(toastId, {
+        render: err.response?.data?.message || "Something went wrong!",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
+
       console.log(err);
     }
-    // .then((response) => {
-    //   if (response.ok) {
-    //     return response.json();
-    //   }
-    //   alert('Invalid credentials');
-    // }).then((data) => {
-    //   Cookies.set('token', data.token, { expires: 1/24 });
-    //   Cookies.set('kerberos', formElements.kerberos.value, { expires: 1/24 });
-    //   navigator('../student');
-    // }
-    // ).catch((error) => {
-    //   console.error('There has been a problem with your fetch operation:', error);
-    // });
   };
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -248,8 +252,7 @@ export default function JoyRegisterSideTemplate() {
             </Stack>
             <Stack gap={4} sx={{ mt: 2 }}>
               <Typography level="body-sm">
-                Already have an account?{" "}
-                      <Link to={'/'}>Login</Link>
+                Already have an account? <Link to={"/"}>Login</Link>
               </Typography>
             </Stack>
           </Box>

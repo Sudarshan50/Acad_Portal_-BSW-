@@ -104,7 +104,7 @@ const MentorProfile = () => {
                     Assigned Hours- {item?.hours} 
                   </p>
                 ) : (
-                  <p className="ml-2">AssignedHours- NILL</p>
+                  <p className="ml-2" style={{color:"red"}}>AssignedHours- NILL</p>
                 )}
               </ListItem>
             ))}

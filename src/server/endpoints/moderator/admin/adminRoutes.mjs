@@ -48,7 +48,7 @@ adminRouter.get("/mentor/view", async (req, res) => {
 adminRouter.get("/mentor/view/:kerberos", async (req, res) => {
   const mentors = await mentor.findOne({ kerberos: req.params.kerberos });
   const queries = await query.find({ mentor: mentors._id});
-  const opportunities = await opportunity.find({ mentor: mentors._id });
+  const opportunities = await opportunity.find({ creator: mentors._id});
   const attendances = await attendance.find({ mentor: mentors._id });
 
   res.status(200).json({

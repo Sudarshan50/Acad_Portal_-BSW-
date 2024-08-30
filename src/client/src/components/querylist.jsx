@@ -240,21 +240,38 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
   const navigate = useNavigate();
 
   const handledelete = async () => {
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Deleting your query...");
+
     try {
       const res = await axios.delete(
         `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/delete/${row._id}`,
         {
           data: { kerberos: Cookies.get("kerberos") },
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
         }
       );
       console.log(res);
       if (res.status === 200) {
-        toast.success("Query deleted successfully");
+        toast.update(toastId, {
+          render: "Query deleted successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
+
         toast.warning("Please refresh the query list to see the changes");
       }
     } catch (err) {
-      toast.error("Error deleting query");
       console.log(err);
+      toast.update(toastId, {
+        render: "Error deleting query",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
 
@@ -287,7 +304,11 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
             navigate("/student/view_queries/" + row._id);
           }}
         >
-          {row.description}
+          {/* {(row.description).substring(0,)}
+           */}
+          {row.description.length > 40
+            ? row.description.substring(0, 50) + "..."
+            : row.description}
         </TableCell>
         <TableCell
           align="right"
@@ -361,7 +382,12 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
             {console.log(row)}
             <Box sx={{ margin: 1, display: "flex", flexDirection: "row" }}>
               <Box sx={{ margin: 2 }}>
-                <Typography variant="h6" fontWeight="bold" gutterBottom component="div">
+                <Typography
+                  variant="h6"
+                  fontWeight="bold"
+                  gutterBottom
+                  component="div"
+                >
                   Query Quick View
                 </Typography>
                 {row.feedback && (
@@ -370,7 +396,10 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
                   </Typography>
                 )}
                 <Typography variant="subtitle1" gutterBottom component="div">
-                  <strong>Description:</strong> {row.description}
+                  <strong>Description:</strong>{" "}
+                  {row.description.length > 100
+                    ? row.description.substring(0, 100) + "..."
+                    : row.description}
                 </Typography>
                 {row.attachments.length !== 0 && (
                   <Box position="relative" display="inline-block">

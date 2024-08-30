@@ -13,14 +13,17 @@ const config = formidable({
 });
 
 //GET: get all attendance
-router.get("/", async (req, res) => {
+router.get("/:kerberos", async (req, res) => {
   try {
-    const mentor = await Mentor.findOne({ kerberos: req.body.kerberos });
+    const mentor = await Mentor.findOne({ kerberos: req.params.kerberos });
     if (!mentor) {
       res.status(400).send("Mentor not found");
       return;
     }
-    const attendances = await Attendance.find({ mentor: mentor._id });
+    const attendances = await Attendance.find({ mentor: mentor._id }).populate({
+      path: "approved_by",
+      select: "name kerberos",
+    });
     res.status(200).send(attendances);
   } catch (e) {
     res.status(500).send;

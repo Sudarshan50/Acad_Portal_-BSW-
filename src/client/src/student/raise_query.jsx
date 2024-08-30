@@ -77,7 +77,8 @@ const QueryForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    toast.warning("Please wait while we submit your query");
+    const toastId = toast.loading("Please wait while we submit your query");
+
     const formData = new FormData();
     formData.append("kerberos", Cookies.get("kerberos"));
     formData.append("type", type);
@@ -85,6 +86,7 @@ const QueryForm = () => {
     Array.from(attachments).forEach((file) => {
       formData.append("attachments", file);
     });
+
     try {
       const res = await axios.post(
         "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/create",
@@ -96,12 +98,25 @@ const QueryForm = () => {
           },
         }
       );
+
       if (res.status === 200) {
-        toast.success("Query submitted successfully");
+        toast.update(toastId, {
+          render: "Query submitted successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
+
         nav("/student");
       }
     } catch (err) {
       console.log(err);
+      toast.update(toastId, {
+        render: err.response?.data?.message || "Failed to submit query",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
 
@@ -149,15 +164,19 @@ const QueryForm = () => {
             <input
               id="attachments"
               type="file"
+              accept="image/*"
               multiple
               onChange={handleAttachmentsChange}
               style={{ display: "none" }}
             />
-            <Box display="flex">
+            <Box display="flex" mt={1}>
               <label htmlFor="attachments">
                 <Button variant="contained" component="span">
                   Upload
                 </Button>
+                <p className="mt-1 mb-1" style={{ color: "red" }}>
+                  Only image files are accepted at max 5!{" "}
+                </p>
               </label>
               {attachments.length > 0 && (
                 <Box ml={2} display="flex" flexWrap="wrap">

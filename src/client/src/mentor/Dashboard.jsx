@@ -22,6 +22,7 @@ import { MentNav } from "./MentNav";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import formatTimestamp from "../components/time_formatter";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [queries, setQueries] = useState([{}]);
@@ -30,20 +31,14 @@ const Dashboard = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [mentId, setMentId] = useState("");
 
-  const checkAuth = () => {
-    // if(Cookies.get('kerberos') === undefined)
-    // {
-    //   navigate('/mentor/login')
-    // }
-  };
-
   const fetchQueries = async () => {
     try {
-      const res = await axios.get("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries/", {
+      const res = await axios.get("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries", {
         headers: {
           Authorization: `Bearer ${Cookies.get("auth_token")}`,
         },
       });
+      console.log(res.data);
       setQueries(res.data);
     } catch (error) {
       console.error(error);
@@ -102,7 +97,9 @@ const Dashboard = () => {
     setSelectedItem(null);
   };
   const handleTakeQuery = async () => {
-    console.log(selectedItem);
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Processing your request...");
+
     try {
       const res = await axios.post(
         `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries/${selectedItem._id}`,
@@ -115,18 +112,33 @@ const Dashboard = () => {
           },
         }
       );
+
       if (res.status === 200) {
         console.log("Query taken successfully");
         fetchQueries();
-        toast.success("Query taken successfully");
+        toast.update(toastId, {
+          render: "Query taken successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
         handleClose();
       }
     } catch (err) {
       console.log(err);
-      toast.warn("Error taking query");
+      // Update the toast to show an error message if the API call fails
+      toast.update(toastId, {
+        render: "Error taking query",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
   const handleTakeOppurtunity = async () => {
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Processing your request...");
+
     try {
       const res = await axios.post(
         `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/take/${selectedItem._id}`,
@@ -139,13 +151,24 @@ const Dashboard = () => {
           },
         }
       );
+
       if (res.status === 200) {
-        toast.success("Opportunity taken successfully");
+        toast.update(toastId, {
+          render: "Opportunity taken successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
         handleClose();
       }
       console.log(res.data);
     } catch (err) {
-      toast.warn("Expired!");
+      toast.update(toastId, {
+        render: "Expired!",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
       console.log(err);
     }
   };
@@ -217,7 +240,7 @@ const Dashboard = () => {
         return (
           <>
             <Typography variant="h6">Query Details</Typography>
-            <Typography variant="body1" >
+            <Typography variant="body1">
               Description: {selectedItem.description}
             </Typography>
             <Typography variant="body1" fontWeight="bold">
@@ -279,7 +302,11 @@ const Dashboard = () => {
             <Typography variant="h6">
               Info: {selectedItem.description}
             </Typography>
-            {selectedItem.status === "available" ? (
+            <Typography variant="h6">Course: {selectedItem.course}</Typography>
+            <Typography variant="h6">
+              Created By: {selectedItem.creator?.kerberos}
+            </Typography>
+            {selectedItem.status === "AVAILABLE" ? (
               <>
                 <Button variant="contained">Edit</Button>
                 <Button variant="contained" color="secondary">
@@ -288,7 +315,8 @@ const Dashboard = () => {
               </>
             ) : (
               <Typography variant="body1" fontWeight="bold">
-                Taken by: {selectedItem.taker ? selectedItem.taker : "No one"}
+                Taken by:{" "}
+                {selectedItem.taker?.kerberos ? selectedItem.taker : "No one"}
               </Typography>
             )}
           </>
@@ -299,11 +327,15 @@ const Dashboard = () => {
             <Typography variant="h6">
               Info: {selectedItem.description}
             </Typography>
-            <Typography variant="h7">
-              Created By: {selectedItem.creator}
+            <Typography variant="h6">Course: {selectedItem.course}</Typography>
+            <Typography variant="h6">
+              Created By: {selectedItem.creator?.kerberos}
             </Typography>
-            <Typography variant="h7">End: {selectedItem.end}</Typography>
-
+            <div>
+              <Typography variant="h7">
+                End: {formatTimestamp(selectedItem.end)}
+              </Typography>
+            </div>
             <Button variant="contained" onClick={handleTakeOppurtunity}>
               Take Up
             </Button>
@@ -374,7 +406,7 @@ const Dashboard = () => {
         >
           {queries ? (
             queries
-              .filter((q) => q.status === "TAKEN")
+              .filter((q) => q.status === "TAKEN" && q.mentor === mentId)
               .map((query) => (
                 <ListItem
                   button
@@ -382,7 +414,10 @@ const Dashboard = () => {
                   onClick={() => handleOpen({ ...query, type: "takenQuery" })}
                 >
                   <ListItemText
-                    primary={`[${query.type}]: ${(query.description)?.substring(0, 100)}...`}
+                    primary={`[${query.type}]: ${query.description?.substring(
+                      0,
+                      100
+                    )}...`}
                   />
                 </ListItem>
               ))
@@ -419,7 +454,10 @@ const Dashboard = () => {
                   }
                 >
                   <ListItemText
-                    primary={`[${query.type}]: ${(query.description)?.substring(0, 100)}...`}
+                    primary={`[${query.type}]: ${query.description?.substring(
+                      0,
+                      100
+                    )}...`}
                   />
                 </ListItem>
               ))
@@ -446,7 +484,7 @@ const Dashboard = () => {
         >
           {opportunities ? (
             opportunities
-              .filter((op) => op.creator === Cookies.get("mentId"))
+              .filter((op) => op.creator?._id === Cookies.get("mentId"))
               .map((opportunity) => (
                 <ListItem
                   button
@@ -456,7 +494,9 @@ const Dashboard = () => {
                   }
                 >
                   <ListItemText
-                    primary={`[${opportunity.course}]: ${(opportunity.description)?.substring(0, 100)}...`}
+                    primary={`[${
+                      opportunity.course
+                    }]: ${opportunity.description?.substring(0, 100)}...`}
                   />
                 </ListItem>
               ))
@@ -483,7 +523,7 @@ const Dashboard = () => {
         >
           {opportunities ? (
             opportunities
-              .filter((op) => op.creator !== Cookies.get("mentId"))
+              .filter((op) => op.creator?._id !== Cookies.get("mentId"))
               .map((opportunity) => (
                 <ListItem
                   button
@@ -493,7 +533,9 @@ const Dashboard = () => {
                   }
                 >
                   <ListItemText
-                    primary={`[${opportunity.course}]: ${(opportunity.description)?.substring(0, 100)}...`}
+                    primary={`[${
+                      opportunity.course
+                    }]: ${opportunity.description?.substring(0, 100)}...`}
                   />
                 </ListItem>
               ))
@@ -506,7 +548,7 @@ const Dashboard = () => {
       <Modal open={open} onClose={handleClose}>
         <Box
           sx={{
-            maxWidth:600,
+            maxWidth: 600,
             maxHeight: 800,
             overflow: "scroll",
             overflowBlock: "scroll",

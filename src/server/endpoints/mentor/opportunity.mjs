@@ -9,12 +9,22 @@ const router=express.Router();
 //GET: get all opportunities
 router.get("/",async (req,res)=>{
     try{
-        const opportunities=await Opportunity.find({state:"AVAILABLE"});
+        const opportunities=await Opportunity.find({state:"AVAILABLE"}).populate("creator").populate("taker");
         res.status(200).send(opportunities);
     }catch(e){
         res.status(500).send
     }
 })
+
+router.get("/all",async (req,res)=>{
+    try{
+        const opportunities = await Opportunity.find().populate("creator").populate("taker");
+        res.status(200).send(opportunities);
+    }catch(er)
+    {
+        res.status(500).send(er);
+    }
+});
 
 //POST: post a opportunity
 router.post("/post",async (req,res)=>{

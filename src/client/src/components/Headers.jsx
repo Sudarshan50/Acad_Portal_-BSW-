@@ -24,7 +24,7 @@ const AutoplayBanner = () => {
 
   return (
     <div className=" mt-90 relative w-full h-[500px] overflow-hidden rounded-lg">
-      <div className="absolute inset-0 flex transition-opacity duration-6500 ease-in-out">
+      <div className="absolute inset-0 flex transition-opacity duration-7500 ease-in-out">
         {/* add text at the centre */}
         {images.map((image, index) => (
           <img

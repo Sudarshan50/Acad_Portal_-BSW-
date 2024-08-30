@@ -48,28 +48,46 @@ export default function JoySignInSideTemplate() {
   const navigator = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Logging in...");
+
     const formElements = event.currentTarget.elements;
     const data = {
       kerberos: formElements.kerberos.value,
       password: formElements.password.value,
     };
+
     try {
       const res = await axios.post(`https://acadbackend-git-main-bswiitdelhi.vercel.app/api/login`, data);
+
       if (res.data.status === "unverified") {
-        toast.error("Please verify your account to login");
+        // Update the toast to show an error message
+        toast.update(toastId, {
+          render: "Please verify your account to login",
+          type: "error",
+          isLoading: false,
+          autoClose: 5000,
+        });
         toast.warn("Please check your webmail to verify your account 📧");
-      }
-      if (res.data.status === "verified") {
-        toast.success("Logged in successfully");
+      } else if (res.data.status === "verified") {
+        // Update the toast to show a success message
+        toast.update(toastId, {
+          render: "Logged in successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000,
+        });
+
         Cookies.set("auth_token", res.data.token, {
           expires: 1 / 24,
           sameSite: "strict",
           secure: false,
         });
-        // Cookies.set('token', res.data.token, { expires: 1/24 });
+
         Cookies.set("kerberos", formElements.kerberos.value, {
           expires: 1 / 24,
         });
+
         navigator("/student");
       }
     } catch (error) {
@@ -77,7 +95,12 @@ export default function JoySignInSideTemplate() {
         "There has been a problem with your fetch operation:",
         error
       );
-      toast.error("Invalid credentials");
+      toast.update(toastId, {
+        render: "Invalid credentials",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
     }
   };
   return (

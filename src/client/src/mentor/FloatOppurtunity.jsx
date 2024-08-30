@@ -27,7 +27,9 @@ const FloatOpportunity = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.info("Please wait while we float the opportunity");
+    // Display a loading toast and save the toast ID to update later
+    const toastId = toast.loading("Please wait while we float the opportunity");
+
     try {
       const res = await axios.post(
         "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/post",
@@ -44,20 +46,35 @@ const FloatOpportunity = () => {
           },
         }
       );
+
       if (res.status === 200) {
         setTitle("");
         setDescription("");
-        // setStartDateTime("");
         setEndDateTime("");
         setCourse("");
         navigate("/mentor/dashboard");
-        toast.success("Opportunity floated successfully");
+        toast.update(toastId, {
+          render: "Opportunity floated successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
       } else {
-        toast.warn("Check the details entered");
+        toast.update(toastId, {
+          render: "Check the details entered",
+          type: "warning",
+          isLoading: false,
+          autoClose: 5000,
+        });
       }
     } catch (err) {
       console.log(err);
-      toast.error("Error in floating opportunity");
+      toast.update(toastId, {
+        render: "Error in floating opportunity",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
 
@@ -131,19 +148,6 @@ const FloatOpportunity = () => {
                 className="w-full p-2 border rounded-md"
               />
             </div>
-
-            {/* <div className="flex flex-col gap-2">
-              <label htmlFor="startDateTime" className="font-medium">
-                Start of event
-              </label>
-              <Input
-                type="datetime-local"
-                id="startDateTime"
-                value={startDateTime}
-                onChange={handleStartDateTimeChange}
-                className="w-full p-2 border rounded-md"
-              />
-            </div> */}
 
             <div className="flex flex-col gap-2">
               <label htmlFor="endDateTime" className="font-medium">

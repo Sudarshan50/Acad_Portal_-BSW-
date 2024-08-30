@@ -8,13 +8,6 @@ const CustomList = ({ props, caller }) => {
         <ListItem key={index}>
           {query.description}
           <p style={{color:"red",fontWeight:"bold",marginLeft:"1em"}}>{query.status}</p>
-          <Button
-            className="ml-auto"
-            size="sm"
-            onClick={() => caller(query._id)}
-          >
-            View Details
-          </Button>
         </ListItem>
       ))}
 

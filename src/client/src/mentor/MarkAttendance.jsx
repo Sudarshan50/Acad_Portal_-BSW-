@@ -22,13 +22,16 @@ const MarkAttendance = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.info("Please wait while we mark your attendance");
+    const toastId = toast.loading("Please wait while we mark your attendance");
+  
     const formData = new FormData();
     formData.append("date", date);
     formData.append("description", discussion);
     formData.append("kerberos", Cookies.get("kerberos"));
     formData.append("photo", photo);
+  
     console.log(date);
+  
     try {
       const res = await axios.post(
         "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/attendance/post",
@@ -40,16 +43,27 @@ const MarkAttendance = () => {
           },
         }
       );
+  
       if (res.status === 200) {
         setDate("");
         setDiscussion("");
         setPhoto([]);
         navigate("/mentor/dashboard");
-        toast.success("Attendance marked successfully");
+        toast.update(toastId, {
+          render: "Attendance marked successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000,
+        });
       }
     } catch (err) {
       console.log(err);
-      toast.error("Error in marking attendance");
+      toast.update(toastId, {
+        render: "Error in marking attendance",
+        type: "error",
+        isLoading: false,
+        autoClose: 5000,
+      });
     }
   };
 

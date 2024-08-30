@@ -1,62 +1,34 @@
 import React from "react";
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 
+
 const ResolvedQueries = ({ queries, isMod, handleModAction }) => (
   <div className="overflow-auto mb-4">
     <table className="w-full min-w-max table-auto text-left">
       <thead>
         <tr>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Type
+            Info
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Info
+            Asked By
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
             Status
           </th>
-          {isMod && (
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              Action
-            </th>
-          )}
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            Status
+          </th>
+        
         </tr>
       </thead>
       <tbody>
         {queries.map((query, index) => (
           <tr key={index}>
-            <td className="border-b border-blue-gray-50 p-4">{query.type}</td>
-            <td className="border-b border-blue-gray-50 p-4">{query.info}</td>
+            <td className="border-b border-blue-gray-50 p-4">{(query.description.length>45)?(query.description).substring(0,45)+"....":(query.description)}</td>
+            <td className="border-b border-blue-gray-50 p-4">{query.student.kerberos?.toUpperCase()}</td>
+            <td className="border-b border-blue-gray-50 p-4">{`${query.last_action_moderator.kerberos}@iitd.ac.in`}</td>
             <td className="border-b border-blue-gray-50 p-4">{query.status}</td>
-            {isMod && (
-              <td className="border-b border-blue-gray-50 p-4">
-                <Button
-                  size="small"
-                  color="green"
-                  onClick={() => handleModAction(query, "Approve")}
-                  className="mr-2"
-                >
-                  Approve
-                </Button>
-                <Button
-                  size="small"
-                  color="red"
-                  onClick={() => handleModAction(query, "Reject")}
-                  className="mr-2"
-                >
-                  Reject
-                </Button>
-                {query.modOption === "Change to Approved" && (
-                  <Button
-                    size="small"
-                    color="blue"
-                    onClick={() => handleModAction(query, "Change to Approved")}
-                  >
-                    Change to Approved
-                  </Button>
-                )}
-              </td>
-            )}
           </tr>
         ))}
       </tbody>
@@ -70,40 +42,26 @@ const RejectedQueries = ({ queries, isMod, handleModAction }) => (
       <thead>
         <tr>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Type
+            Info
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Info
+            Asked By
+          </th>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            Moderator
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
             Status
           </th>
-          {isMod && (
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              Action
-            </th>
-          )}
         </tr>
       </thead>
       <tbody>
         {queries.map((query, index) => (
           <tr key={index}>
-            <td className="border-b border-blue-gray-50 p-4">{query.type}</td>
-            <td className="border-b border-blue-gray-50 p-4">{query.info}</td>
+            <td className="border-b border-blue-gray-50 p-4">{(query.description.length>45)?(query.description).substring(0,45)+"....":(query.description)}</td>
+            <td className="border-b border-blue-gray-50 p-4">{query.student.kerberos?.toUpperCase()}</td>
+            <td className="border-b border-blue-gray-50 p-4">{`${query.last_action_moderator.kerberos}@iitd.ac.in`}</td>
             <td className="border-b border-blue-gray-50 p-4">{query.status}</td>
-            {isMod && (
-              <td className="border-b border-blue-gray-50 p-4">
-                {query.modOption === "Change to Approved" && (
-                  <Button
-                    size="small"
-                    color="blue"
-                    onClick={() => handleModAction(query, "Change to Approved")}
-                  >
-                    Change to Approved
-                  </Button>
-                )}
-              </td>
-            )}
           </tr>
         ))}
       </tbody>
@@ -111,16 +69,19 @@ const RejectedQueries = ({ queries, isMod, handleModAction }) => (
   </div>
 );
 
-const ExpiredOpportunities = ({ opportunities }) => (
+const TakenOppurtunites = ({ opportunities }) => (
   <div className="overflow-auto mb-4">
     <table className="w-full min-w-max table-auto text-left">
       <thead>
         <tr>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Type
+            Info
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Info
+            Course
+          </th>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            Created By
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
             Status
@@ -131,13 +92,56 @@ const ExpiredOpportunities = ({ opportunities }) => (
         {opportunities.map((opportunity, index) => (
           <tr key={index}>
             <td className="border-b border-blue-gray-50 p-4">
-              {opportunity.type}
+              {opportunity.title}
             </td>
             <td className="border-b border-blue-gray-50 p-4">
-              {opportunity.info}
+              {opportunity.course}
             </td>
             <td className="border-b border-blue-gray-50 p-4">
-              {opportunity.status}
+              {opportunity.creator.kerberos?.toUpperCase()}
+            </td>
+            <td className="border-b border-blue-gray-50 p-4">
+              {opportunity.state}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+const ExpiredOpportunities = ({ opportunities }) => (
+  <div className="overflow-auto mb-4">
+    <table className="w-full min-w-max table-auto text-left">
+      <thead>
+        <tr>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            Info
+          </th>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            Course
+          </th>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            Taken By
+          </th>
+          <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
+            Status
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {opportunities.map((opportunity, index) => (
+          <tr key={index}>
+            <td className="border-b border-blue-gray-50 p-4">
+              {opportunity.title}
+            </td>
+            <td className="border-b border-blue-gray-50 p-4">
+              {opportunity.course}
+            </td>
+            <td className="border-b border-blue-gray-50 p-4">
+              {opportunity?.taker?.kerberos?.toUpperCase()}
+            </td>
+            <td className="border-b border-blue-gray-50 p-4">
+              {opportunity.state}
             </td>
           </tr>
         ))}
@@ -152,31 +156,26 @@ const RejectedAttendances = ({ attendances, isMod, handleModAction }) => (
       <thead>
         <tr>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Type
+            Info
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-            Info
+            Moderator
           </th>
           <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
             Status
           </th>
-          {isMod && (
-            <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-              Action
-            </th>
-          )}
         </tr>
       </thead>
       <tbody>
         {attendances.map((attendance, index) => (
           <tr key={index}>
             <td className="border-b border-blue-gray-50 p-4">
-              {attendance.type}
+            {(attendance.description.length>45)?(attendance.description).substring(0,45)+"....":(attendance.description)}
             </td>
             <td className="border-b border-blue-gray-50 p-4">
-              {attendance.info}
+            {`${attendance.approved_by.kerberos}@iitd.ac.in`}
             </td>
-            <td className="border-b border-blue-gray-50 p-4">
+            <td className="border-b border-blue-gray-50 p-4 ring-deep-orange-700">
               {attendance.status}
             </td>
             {isMod && (
@@ -203,17 +202,19 @@ const OtherActivities = ({
   resolvedQueries,
   rejectedQueries,
   expiredOpportunities,
+  takenOpportunities,
   rejectedAttendances,
   isMod,
   handleModAction,
 }) => (
+  
   <Card className="w-full mb-4">
     <CardBody>
       <Typography variant="h5" className="mb-4">
         Other Activity
       </Typography>
       <Typography variant="h6" className="mb-4">
-        RESOLVED queries taken by them, i.e. hours not approved or rejected
+        RESOLVED queries, i.e. hours not approved or rejected
       </Typography>
       <ResolvedQueries
         queries={resolvedQueries}
@@ -221,7 +222,7 @@ const OtherActivities = ({
         handleModAction={handleModAction}
       />
       <Typography variant="h6" className="mb-4">
-        Queries taken by them with REJECTED hours
+        Queries taken with REJECTED hours
       </Typography>
       <RejectedQueries
         queries={rejectedQueries}
@@ -229,15 +230,15 @@ const OtherActivities = ({
         handleModAction={handleModAction}
       />
       <Typography variant="h6" className="mb-4">
-        EXPIRED opportunities floated by them
+        My Floated opportunities
       </Typography>
       <ExpiredOpportunities opportunities={expiredOpportunities} />
       <Typography variant="h6" className="mb-4">
-        EXPIRED opportunities taken by them
+        TAKEN opportunities
       </Typography>
-      <ExpiredOpportunities opportunities={expiredOpportunities} />
+      <TakenOppurtunites opportunities={takenOpportunities} />
       <Typography variant="h6" className="mb-4">
-        Their REJECTED Attendances
+        REJECTED Attendances
       </Typography>
       <RejectedAttendances
         attendances={rejectedAttendances}
