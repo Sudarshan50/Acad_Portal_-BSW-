@@ -36,7 +36,7 @@ const Dashboard = () => {
   const fetechQueries = async () => {
     try {
       const attendance = await axios.get(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/attendance/" +
+        "https://acadbackend-bswiitdelhi.vercel.app/api/moderator/attendance/" +
           Cookies.get("kerberos"),
         {
           headers: {
@@ -45,7 +45,7 @@ const Dashboard = () => {
         }
       );
       const queries = await axios.get(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/queries/" +
+        "https://acadbackend-bswiitdelhi.vercel.app/api/moderator/queries/" +
           Cookies.get("kerberos"),
         {
           headers: {
@@ -54,7 +54,7 @@ const Dashboard = () => {
         }
       );
       const opportunities = await axios.get(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/opportunities/" +
+        "https://acadbackend-bswiitdelhi.vercel.app/api/moderator/opportunities/" +
           Cookies.get("kerberos"),
         {
           headers: {

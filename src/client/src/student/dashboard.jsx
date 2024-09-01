@@ -31,11 +31,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }
@@ -69,11 +69,11 @@ const StudentDashboard = () => {
     const statuses = ["QUEUED", "AVAILABLE", "TAKEN"];
     let url;
     if (statuses.length === 0) {
-      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}`;
     } else {
-      url = `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
+      url = `https://acadbackend-bswiitdelhi.vercel.app/api/student/queries/?kerberos=${Cookies.get(
         "kerberos"
       )}&statuses=${statuses.join(",")}`;
     }

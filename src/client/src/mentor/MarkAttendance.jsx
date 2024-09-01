@@ -32,7 +32,7 @@ const MarkAttendance = () => {
 
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/attendance/post",
+        "https://acadbackend-bswiitdelhi.vercel.app/api/mentor/attendance/post",
         formData,
         {
           headers: {

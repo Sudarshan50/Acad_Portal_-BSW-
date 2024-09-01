@@ -30,7 +30,7 @@ const StudentProfile = ({ isMod }) => {
   const fetchPersonalInfo = async () => {
     try {
       const info = await axios.get(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/${Cookies.get("kerberos")}`,
+        `https://acadbackend-bswiitdelhi.vercel.app/api/student/profile/${Cookies.get("kerberos")}`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,
@@ -56,7 +56,7 @@ const StudentProfile = ({ isMod }) => {
 
     try {
       let res = await axios.put(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/" + Cookies.get("kerberos"),
+        "https://acadbackend-bswiitdelhi.vercel.app/api/student/profile/" + Cookies.get("kerberos"),
         profile,
         {
           headers: {
@@ -94,7 +94,7 @@ const StudentProfile = ({ isMod }) => {
   
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/profile/changePassword",
+        "https://acadbackend-bswiitdelhi.vercel.app/api/student/profile/changePassword",
         {
           kerberos: Cookies.get("kerberos"),
           oldPassword: key.oldpassword,

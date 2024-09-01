@@ -59,7 +59,7 @@ export default function JoySignInSideTemplate() {
   
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/auth/login",
+        "https://acadbackend-bswiitdelhi.vercel.app/api/mentor/auth/login",
         data
       );
   

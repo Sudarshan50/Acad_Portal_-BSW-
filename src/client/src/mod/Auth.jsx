@@ -59,7 +59,7 @@ export default function JoySignInSideTemplate() {
 
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/moderator/auth/login",
+        "https://acadbackend-bswiitdelhi.vercel.app/api/moderator/auth/login",
         data
       );
 
@@ -200,7 +200,7 @@ export default function JoySignInSideTemplate() {
                 //     kerberos: formElements.kerberos.value,
                 //     password: formElements.password.value,
                 //   };
-                //   fetch("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/login",{
+                //   fetch("https://acadbackend-bswiitdelhi.vercel.app/api/login",{
                 //     method: 'POST',
                 //     headers: {
                 //       'Content-Type': 'application/json',

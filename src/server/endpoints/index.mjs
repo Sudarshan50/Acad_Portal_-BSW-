@@ -10,8 +10,6 @@ import checkRole from "../middleware/checkRole.mjs";
 dotenv.config();
 
 const router = express.Router();
-// const SECRET_KEY = "never-rely-on-secret-key-easy-to-hack";
-//Authentication
 //POST: /signup - Signup
 router.post("/signup", async (req, res) => {
   const { kerberos, password, name, phone_number } = req.body;
@@ -41,7 +39,7 @@ router.post("/signup", async (req, res) => {
   await authToken.save();
   console.log(authToken);
   try {
-    const link = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/verify/${authToken.token}`;
+    const link = `https://acadbackend-bswiitdelhi.vercel.app/api/verify/${authToken.token}`;
     await verifEmail(`${student.kerberos}@iitd.ac.in`, link); //
     res.status(200).json({
       message: "Please check your email to verify your account..",
@@ -69,7 +67,7 @@ router.post("/login", async (req, res) => {
   if (student.verified === false) {
     const authToken = await Token.findOne({ userId: student._id });
     try {
-      const link = `https://acadbackend-git-main-sudarshan50s-projects.vercel.app/api/verify/${authToken.token}`;
+      const link = `https://acadbackend-bswiitdelhi.vercel.app/api/verify/${authToken.token}`;
       await verifEmail(`${student.kerberos}@iitd.ac.in`, link);
       return res.status(200).json({
         message: "Please check your email to verify your account..",

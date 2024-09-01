@@ -58,7 +58,7 @@ export default function JoySignInSideTemplate() {
     };
 
     try {
-      const res = await axios.post(`https://acadbackend-git-main-bswiitdelhi.vercel.app/api/login`, data);
+      const res = await axios.post(`https://acadbackend-bswiitdelhi.vercel.app/api/login`, data);
 
       if (res.data.status === "unverified") {
         // Update the toast to show an error message

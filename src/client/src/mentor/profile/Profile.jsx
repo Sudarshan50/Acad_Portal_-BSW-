@@ -54,7 +54,7 @@ const Profile = ({ isMod }) => {
   const fetchPersonalInfo = async () => {
     try {
       const info = await axios.get(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/auth/details/${Cookies.get(
+        `https://acadbackend-bswiitdelhi.vercel.app/api/mentor/auth/details/${Cookies.get(
           "kerberos"
         )}`,
         {
@@ -77,7 +77,7 @@ const Profile = ({ isMod }) => {
   };
   const fetchAllQueries = async () => {
     try {
-      const res = await axios.get("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries/avquery/"+Cookies.get('kerberos'), {
+      const res = await axios.get("https://acadbackend-bswiitdelhi.vercel.app/api/mentor/queries/avquery/"+Cookies.get('kerberos'), {
         headers: {
           Authorization: `Bearer ${Cookies.get("auth_token")}`,
         },
@@ -93,7 +93,7 @@ const Profile = ({ isMod }) => {
   const fetchAllAttendace = async () => {
     try {
       const res = await axios.get(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/attendance/"+Cookies.get("kerberos"),
+        "https://acadbackend-bswiitdelhi.vercel.app/api/mentor/attendance/"+Cookies.get("kerberos"),
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,
@@ -111,7 +111,7 @@ const Profile = ({ isMod }) => {
   const fetchAllOpportunities = async () => {
     try {
       const res = await axios.get(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/all",
+        "https://acadbackend-bswiitdelhi.vercel.app/api/mentor/opportunity/all",
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,
@@ -145,7 +145,7 @@ const Profile = ({ isMod }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/auth/change-password",
+        "https://acadbackend-bswiitdelhi.vercel.app/api/mentor/auth/change-password",
         {
           kerberos: Cookies.get("kerberos"),
           oldPassword: key.oldpassword,

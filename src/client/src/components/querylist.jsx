@@ -242,7 +242,7 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
 
-      {numSelected > 0 ? (
+      {/* {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
             <DeleteIcon />
@@ -254,7 +254,7 @@ function EnhancedTableToolbar(props) {
             <FilterListIcon />
           </IconButton>
         </Tooltip>
-      )}
+      )} */}
     </Toolbar>
   );
 }
@@ -300,7 +300,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
 
     try {
       const res = await axios.delete(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/delete/${row._id}`,
+        `https://acadbackend-bswiitdelhi.vercel.app/api/student/queries/delete/${row._id}`,
         {
           data: { kerberos: Cookies.get("kerberos") },
           headers: {
@@ -314,7 +314,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
           render: "Query deleted successfully",
           type: "success",
           isLoading: false,
-          autoClose:2000,
+          autoClose: 2000,
         });
 
         toast.warning("Please refresh the query list to see the changes");
@@ -325,7 +325,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
         render: "Error deleting query",
         type: "error",
         isLoading: false,
-        autoClose:2000,
+        autoClose: 2000,
       });
     }
   };

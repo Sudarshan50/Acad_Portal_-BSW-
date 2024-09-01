@@ -89,7 +89,7 @@ const QueryForm = () => {
     try {
       console.log(id);
       let res = await axios.patch(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/update/${id}`,
+        `https://acadbackend-bswiitdelhi.vercel.app/api/student/queries/update/${id}`,
         formData,
         {
           headers: {
@@ -132,7 +132,7 @@ const QueryForm = () => {
       navigate("/student");
     }
     fetch(
-      "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/student/queries/queued?qid=" +
+      "https://acadbackend-bswiitdelhi.vercel.app/api/student/queries/queued?qid=" +
         encodeURIComponent(qid) +
         "&kerberos=" +
         encodeURIComponent(Cookies.get("kerberos")),

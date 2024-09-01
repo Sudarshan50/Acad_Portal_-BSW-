@@ -29,7 +29,7 @@ const Student = () => {
   const fetchMentor = async () => {
     try {
       const res = await axios.get(
-        "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/admin/student/view/",
+        "https://acadbackend-bswiitdelhi.vercel.app/api/mentor/admin/student/view/",
         {
           headers: {
             Authorization: "Bearer " + Cookies.get("auth_token"),

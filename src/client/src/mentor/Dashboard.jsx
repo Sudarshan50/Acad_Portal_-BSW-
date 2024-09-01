@@ -33,7 +33,7 @@ const Dashboard = () => {
 
   const fetchQueries = async () => {
     try {
-      const res = await axios.get("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries", {
+      const res = await axios.get("https://acadbackend-bswiitdelhi.vercel.app/api/mentor/queries", {
         headers: {
           Authorization: `Bearer ${Cookies.get("auth_token")}`,
         },
@@ -46,7 +46,7 @@ const Dashboard = () => {
   const fetchOpportunities = async () => {
     try {
       const res = await axios.get(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/all`,
+        `https://acadbackend-bswiitdelhi.vercel.app/api/mentor/opportunity/all`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,
@@ -64,7 +64,7 @@ const Dashboard = () => {
   const fetchMentorId = async () => {
     try {
       const res = await axios.get(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/auth/details/${Cookies.get(
+        `https://acadbackend-bswiitdelhi.vercel.app/api/mentor/auth/details/${Cookies.get(
           "kerberos"
         )}`,
         {
@@ -101,7 +101,7 @@ const Dashboard = () => {
 
     try {
       const res = await axios.post(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/queries/${selectedItem._id}`,
+        `https://acadbackend-bswiitdelhi.vercel.app/api/mentor/queries/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
         },
@@ -137,7 +137,7 @@ const Dashboard = () => {
     const toastId = toast.loading("Deleting opportunity...");
     try {
       const res = await axios.delete(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/post/${selectedItem._id}`,
+        `https://acadbackend-bswiitdelhi.vercel.app/api/mentor/opportunity/post/${selectedItem._id}`,
         {
           data:{
             kerberos: Cookies.get("kerberos"),
@@ -172,7 +172,7 @@ const Dashboard = () => {
 
     try {
       const res = await axios.post(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/take/${selectedItem._id}`,
+        `https://acadbackend-bswiitdelhi.vercel.app/api/mentor/opportunity/take/${selectedItem._id}`,
         {
           kerberos: Cookies.get("kerberos"),
         },

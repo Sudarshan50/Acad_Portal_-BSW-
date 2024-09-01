@@ -18,7 +18,7 @@ const StudentProfile = () => {
     const fetchStudentdata = async () => {
       try {
         const res = await axios.get(
-          `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/admin/student/view/${kerberos}`,
+          `https://acadbackend-bswiitdelhi.vercel.app/api/mentor/admin/student/view/${kerberos}`,
           {
             headers: {
               Authorization: `Bearer ${Cookies.get("auth_token")}`,

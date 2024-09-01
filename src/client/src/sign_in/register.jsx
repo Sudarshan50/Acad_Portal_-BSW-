@@ -60,7 +60,7 @@ export default function JoyRegisterSideTemplate() {
     };
 
     try {
-      const res = await axios.post(`https://acadbackend-git-main-bswiitdelhi.vercel.app/api/signup`, data);
+      const res = await axios.post(`https://acadbackend-bswiitdelhi.vercel.app/api/signup`, data);
 
       if (res.status === 200) {
         toast.update(toastId, {
@@ -185,7 +185,7 @@ export default function JoyRegisterSideTemplate() {
                   handleSubmit(event);
                 }}
 
-                // fetch("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/login",{
+                // fetch("https://acadbackend-bswiitdelhi.vercel.app/api/login",{
                 //   method: 'POST',
                 //   headers: {
                 //     'Content-Type': 'application/json',
