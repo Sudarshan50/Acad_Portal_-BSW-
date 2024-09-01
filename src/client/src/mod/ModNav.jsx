@@ -41,7 +41,7 @@ const profileMenuItems = [
   {
     label: "Sign Out",
     icon: PowerIcon,
-    action: async() => {
+    action: async () => {
       window.location.href = "/mod";
       Cookies.remove("auth_token");
       Cookies.remove("kerberos");
@@ -265,6 +265,10 @@ export function MentNav() {
             position: "absolute",
             top: "0.9em",
             left: "6rem",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            window.location.href = "https://bsw.iitd.ac.in/index.php";
           }}
         />
       </div>

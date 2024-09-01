@@ -266,6 +266,10 @@ export function ComplexNavbar() {
           position: "absolute",
           top: "0.9em",
           left: "6rem",
+          cursor: "pointer",
+        }}
+        onClick={()=>{
+          window.location.href = "https://bsw.iitd.ac.in/index.php";
         }}
       />
     </div>

@@ -199,9 +199,7 @@ function NavListMenu() {
 }
 
 // nav list component
-const navListItems = [
-  
-];
+const navListItems = [];
 
 function NavList() {
   return (
@@ -232,7 +230,7 @@ export function MentNav() {
 
   useEffect(() => {
     // const token = localStorage.getItem("token");
-    const token = Cookies.get("auth_token");  
+    const token = Cookies.get("auth_token");
     if (token) {
       setIsLoggedIn(true);
     }
@@ -249,50 +247,54 @@ export function MentNav() {
 
   return (
     <>
-    <div style={{position:"relative"}}>
-    <img
-        src="https://bsw.iitd.ac.in/images/bsw_logo.png"
-        style={{
-          height: "2em",
-          position: "absolute",
-          top: "0.9em",
-          left: "6rem",
-        }}
-      />
-    </div>
-    <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
-      <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-        <Typography
-          as="a"
-          href="https://bsw.iitd.ac.in/index.php"
-          className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
-        >
-          BSW
-        </Typography>
-        <div className="hidden lg:block">
-          <NavList />
-        </div>
-        <IconButton
-          size="sm"
-          color="blue-gray"
-          variant="text"
-          onClick={toggleIsNavOpen}
-          className="ml-auto mr-2 lg:hidden"
-        >
-          <Bars2Icon className="h-6 w-6" />
-        </IconButton>
-
-        {isLoggedIn === false ? (
-          <Button size="sm" variant="text">
-            <span>Log In</span>
-          </Button>
-        ) : null}
-        <ProfileMenu />
+      <div style={{ position: "relative" }}>
+        <img
+          src="https://bsw.iitd.ac.in/images/bsw_logo.png"
+          style={{
+            height: "2em",
+            position: "absolute",
+            top: "0.9em",
+            left: "6rem",
+            cursor: "pointer",
+          }}
+          onClick={() => {
+            window.location.href = "https://bsw.iitd.ac.in/index.php";
+          }}
+        />
       </div>
-      <MobileNav open={isNavOpen} className="overflow-scroll">
-        <NavList />
-      </MobileNav>
-    </Navbar>
+      <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
+        <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
+          <Typography
+            as="a"
+            href="https://bsw.iitd.ac.in/index.php"
+            className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
+          >
+            BSW
+          </Typography>
+          <div className="hidden lg:block">
+            <NavList />
+          </div>
+          <IconButton
+            size="sm"
+            color="blue-gray"
+            variant="text"
+            onClick={toggleIsNavOpen}
+            className="ml-auto mr-2 lg:hidden"
+          >
+            <Bars2Icon className="h-6 w-6" />
+          </IconButton>
+
+          {isLoggedIn === false ? (
+            <Button size="sm" variant="text">
+              <span>Log In</span>
+            </Button>
+          ) : null}
+          <ProfileMenu />
+        </div>
+        <MobileNav open={isNavOpen} className="overflow-scroll">
+          <NavList />
+        </MobileNav>
+      </Navbar>
     </>
   );
 }
