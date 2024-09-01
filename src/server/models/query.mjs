@@ -46,7 +46,7 @@ const querySchema = new mongoose.Schema({
     default: null,
   },
   taken_at: {
-    type: Number,
+    type: Date,
     default: 0,
   },
   status: {

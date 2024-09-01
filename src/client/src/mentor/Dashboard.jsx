@@ -38,7 +38,6 @@ const Dashboard = () => {
           Authorization: `Bearer ${Cookies.get("auth_token")}`,
         },
       });
-      console.log(res.data);
       setQueries(res.data);
     } catch (error) {
       console.error(error);
@@ -47,7 +46,7 @@ const Dashboard = () => {
   const fetchOpportunities = async () => {
     try {
       const res = await axios.get(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/`,
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/all`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("auth_token")}`,
@@ -55,6 +54,7 @@ const Dashboard = () => {
         }
       );
       if (res.status === 200) {
+        console.log(res.data);
         setOpportunities(res.data);
       }
     } catch (err) {
@@ -81,7 +81,6 @@ const Dashboard = () => {
     }
   };
   useEffect(() => {
-    // checkAuth();
     fetchMentorId();
     fetchQueries();
     fetchOpportunities();
@@ -120,23 +119,55 @@ const Dashboard = () => {
           render: "Query taken successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
         handleClose();
       }
     } catch (err) {
       console.log(err);
-      // Update the toast to show an error message if the API call fails
       toast.update(toastId, {
         render: "Error taking query",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };
+  const handleDeletOpp = async () => {
+    const toastId = toast.loading("Deleting opportunity...");
+    try {
+      const res = await axios.delete(
+        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/opportunity/post/${selectedItem._id}`,
+        {
+          data:{
+            kerberos: Cookies.get("kerberos"),
+          },
+          headers: {
+            Authorization: `Bearer ${Cookies.get("auth_token")}`,
+          },
+        }
+      );
+      if (res.status === 200) {
+        toast.update(toastId, {
+          render: "Opportunity deleted successfully",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000,
+        });
+        fetchOpportunities();
+        handleClose();
+      }
+    } catch (err) {
+      toast.update(toastId, {
+        render: "Error deleting opportunity",
+        type: "error",
+        isLoading: false,
+        autoClose: 2000,
+      });
+      console.log(err);
+    }
+  };
   const handleTakeOppurtunity = async () => {
-    // Display a loading toast and save the toast ID to update later
     const toastId = toast.loading("Processing your request...");
 
     try {
@@ -157,7 +188,7 @@ const Dashboard = () => {
           render: "Opportunity taken successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
         handleClose();
       }
@@ -167,14 +198,13 @@ const Dashboard = () => {
         render: "Expired!",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
       console.log(err);
     }
   };
 
   const renderModalContent = () => {
-    console.log(selectedItem);
     if (!selectedItem) return null;
 
     switch (selectedItem.type) {
@@ -186,14 +216,26 @@ const Dashboard = () => {
               Description: {selectedItem.description}
             </Typography>
             <Typography variant="body1" fontWeight="bold">
-              Quereid By: {selectedItem.student.name},{" "}
+              Queried By: {selectedItem.student.name},{" "}
               {selectedItem.student.kerberos.toUpperCase()}
+              <Button
+                className="ml-2 mr-2"
+                size="sm"
+                color="lime"
+                onClick={() => {
+                  navigate(
+                    `/mentor/profile/student/${selectedItem.student.kerberos}`
+                  );
+                }}
+              >
+                View Profile
+              </Button>
             </Typography>
             <Typography variant="body1" fontWeight="bold">
               Student Phone: {selectedItem.student.phone_number}
             </Typography>
             <Typography variant="body1">
-              Taken At: {selectedItem.taken_at}
+              Taken At: {formatTimestamp(selectedItem.taken_at)}
             </Typography>
             {selectedItem.attachments &&
               selectedItem.attachments.length > 0 && (
@@ -227,13 +269,6 @@ const Dashboard = () => {
                   </Typography>
                 </>
               )}
-            {/* <Button
-              style={{ padding: "15px", marginTop: "1em" }}
-              variant="contained"
-              onClick={() => navigate(`/mentor/view_query/${selectedItem._id}`)}
-            >
-              View Query
-            </Button> */}
           </>
         );
       case "availableQuery":
@@ -244,8 +279,20 @@ const Dashboard = () => {
               Description: {selectedItem.description}
             </Typography>
             <Typography variant="body1" fontWeight="bold">
-              Quereid By: {selectedItem.student.name},{" "}
+              Queried By: {selectedItem.student.name},{" "}
               {selectedItem.student.kerberos.toUpperCase()}
+              <Button
+                className="ml-2 mr-2"
+                size="sm"
+                color="lime"
+                onClick={() => {
+                  navigate(
+                    `/mentor/profile/student/${selectedItem.student.kerberos}`
+                  );
+                }}
+              >
+                View Profile
+              </Button>
             </Typography>
             {selectedItem.attachments &&
               selectedItem.attachments.length > 0 && (
@@ -302,21 +349,32 @@ const Dashboard = () => {
             <Typography variant="h6">
               Info: {selectedItem.description}
             </Typography>
-            <Typography variant="h6">Course: {selectedItem.course}</Typography>
             <Typography variant="h6">
-              Created By: {selectedItem.creator?.kerberos}
+              Course: {selectedItem.course.toUpperCase()}
             </Typography>
-            {selectedItem.status === "AVAILABLE" ? (
+            <Typography variant="h6">
+              Created By: {(selectedItem?.creator?.kerberos).toUpperCase()}
+            </Typography>
+            <Typography variant="subtitle1">
+              Expired By: {formatTimestamp(selectedItem.end)}
+            </Typography>
+            {selectedItem.state === "AVAILABLE" ? (
               <>
-                <Button variant="contained">Edit</Button>
-                <Button variant="contained" color="secondary">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className="mt-2"
+                  onClick={handleDeletOpp}
+                >
                   Delete
                 </Button>
               </>
             ) : (
               <Typography variant="body1" fontWeight="bold">
                 Taken by:{" "}
-                {selectedItem.taker?.kerberos ? selectedItem.taker : "No one"}
+                {selectedItem.taker?.kerberos
+                  ? (selectedItem.taker?.kerberos).toUpperCase()
+                  : "No one"}
               </Typography>
             )}
           </>
@@ -414,10 +472,11 @@ const Dashboard = () => {
                   onClick={() => handleOpen({ ...query, type: "takenQuery" })}
                 >
                   <ListItemText
-                    primary={`[${query.type}]: ${query.description?.substring(
-                      0,
-                      100
-                    )}...`}
+                    primary={`[${query.type}]: ${
+                      query.description.length > 50
+                        ? query.description.substring(0, 50) + "...."
+                        : query.description
+                    }`}
                   />
                 </ListItem>
               ))
@@ -454,10 +513,11 @@ const Dashboard = () => {
                   }
                 >
                   <ListItemText
-                    primary={`[${query.type}]: ${query.description?.substring(
-                      0,
-                      100
-                    )}...`}
+                    primary={`[${query.type}]: ${
+                      query.description.length > 50
+                        ? query.description.substring(0, 50) + "...."
+                        : query.description
+                    }`}
                   />
                 </ListItem>
               ))
@@ -467,7 +527,7 @@ const Dashboard = () => {
         </Box>
 
         <Typography variant="h5" component="div">
-          Floated Opportunities
+          Floated Opportunities By Me
         </Typography>
         <Box
           display="flex"
@@ -498,6 +558,17 @@ const Dashboard = () => {
                       opportunity.course
                     }]: ${opportunity.description?.substring(0, 100)}...`}
                   />
+                  <ListItemText>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      color={
+                        opportunity.state === "TAKEN" ? "green" : "blueviolet"
+                      }
+                    >
+                      State: {opportunity.state}
+                    </Typography>
+                  </ListItemText>
                 </ListItem>
               ))
           ) : (
@@ -506,7 +577,7 @@ const Dashboard = () => {
         </Box>
 
         <Typography variant="h5" component="div">
-          Other Opportunities
+          Other Available Opportunities
         </Typography>
         <Box
           display="flex"
@@ -549,7 +620,7 @@ const Dashboard = () => {
         <Box
           sx={{
             maxWidth: 600,
-            maxHeight: 800,
+            maxHeight: 700,
             overflow: "scroll",
             overflowBlock: "scroll",
             position: "absolute",

@@ -14,19 +14,23 @@ router.get("/:kerberos", async (req, res) => {
       res.status(400).send("Moderator not found");
       return;
     }
-    const attendances = await Attendance.find().populate({
-      path: "mentor",
-      select: "name",
-    }).populate({
-      path: "last_action_moderator",
-      select: "name",
-    }).populate({
-      path: "approved_by",
-      select: "name",
-    }).populate({
-      path: "disapproved_by",
-      select: "name",
-    });
+    const attendances = await Attendance.find()
+      .populate({
+        path: "mentor",
+        select: "name kerberos",
+      })
+      .populate({
+        path: "last_action_moderator",
+        select: "name kerberos",
+      })
+      .populate({
+        path: "approved_by",
+        select: "name kerberos",
+      })
+      .populate({
+        path: "disapproved_by",
+        select: "name kerberos",
+      });
     res.status(200).send(attendances);
   } catch (e) {
     res.status(500).send;
@@ -36,10 +40,10 @@ router.get("/:kerberos", async (req, res) => {
 //PUT: approves the attendance
 router.post("/approve/:id", async (req, res) => {
   try {
-    const attendance = await Attendance.findOne({ _id: req.params.id });
+    const attendance = await Attendance.findOne({
+      _id: req.params.id,
+    }).populate("mentor");
     const moderator = await Moderator.findOne({ kerberos: req.body.kerberos });
-    // console.log(moderator);
-    console.log(req.body);
     if (!moderator) {
       res.status(400).send("Moderator not found");
       return;
@@ -53,8 +57,11 @@ router.post("/approve/:id", async (req, res) => {
     attendance.last_action_moderator = moderator._id;
     attendance.hours = req.body.hours;
     await attendance.save();
+    attendance.mentor.hours += Number(req.body.hours);
+    await attendance.mentor.save();
     res.status(200).send(attendance);
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 });
@@ -62,7 +69,7 @@ router.post("/approve/:id", async (req, res) => {
 //PUT: disapproves the attendance
 router.post("/disapprove/:id", async (req, res) => {
   try {
-    const attendance = await Attendance.findOne({ _id: req.params.id });
+    const attendance = await Attendance.findOne({ _id: req.params.id }).populate('mentor');
     const moderator = await Moderator.findOne({ kerberos: req.body.kerberos });
     if (!moderator) {
       res.status(400).send("Moderator not found");
@@ -72,13 +79,17 @@ router.post("/disapprove/:id", async (req, res) => {
       res.status(400).send("Attendance not found");
       return;
     }
+    let hours = attendance.hours;
     attendance.disapproved_by = moderator._id;
     attendance.hours = 0;
     attendance.last_action_moderator = moderator._id;
     attendance.status = "DISAPPROVED";
     await attendance.save();
+    attendance.mentor.hours -= hours;
+    await attendance.mentor.save();
     res.status(200).send(attendance);
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 });

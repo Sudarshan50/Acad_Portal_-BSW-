@@ -46,7 +46,6 @@ const Profile = ({ isMod }) => {
 
   useEffect(() => {
     fetchPersonalInfo();
-    fetchOtherMentors();
     fetchAllAttendace();
     fetchAllQueries();
     fetchAllOpportunities();
@@ -74,23 +73,6 @@ const Profile = ({ isMod }) => {
     } catch (er) {
       console.log(er);
       toast.error("Error in fetching personal info");
-    }
-  };
-  const fetchOtherMentors = async () => {
-    try {
-      const res = await axios.get(
-        `https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/admin/mentors/view`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("auth_token")}`,
-          },
-        }
-      );
-      if (res.status === 200) {
-        setOtherMentors(res.data.mentors);
-      }
-    } catch (err) {
-      console.log(err);
     }
   };
   const fetchAllQueries = async () => {
@@ -239,16 +221,6 @@ const Profile = ({ isMod }) => {
             >
               Other Activities
             </li>
-            <li
-              className={`p-4 cursor-pointer transition-colors duration-200 ${
-                activeTab === "view_other_mentors"
-                  ? "bg-gray-300 text-blue-600"
-                  : "hover:bg-gray-200"
-              }`}
-              onClick={() => setActiveTab("view_other_mentors")}
-            >
-              Mentors
-            </li>
           </ul>
         </div>
         {/* Content */}
@@ -332,37 +304,6 @@ const Profile = ({ isMod }) => {
               isMod={isMod}
               handleModAction={handleModAction}
             />
-          )}
-          {activeTab === "view_other_mentors" && (
-            <Card className="w-full mb-4">
-              <CardBody>
-                <TableContainer
-                  component={Paper}
-                  style={{ maxWidth: "100%", overflowX: "auto" }}
-                >
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Email</TableCell>
-                        <TableCell>Course</TableCell>
-                        <TableCell>Hours</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {otherMentors?.map((ment) => (
-                        <TableRow key={ment._id}>
-                          <TableCell>{ment.name}</TableCell>
-                          <TableCell>{`${ment.kerberos}@iitd.ac.in`}</TableCell>
-                          <TableCell>{ment.course}</TableCell>
-                          <TableCell>{ment.hours}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </CardBody>
-            </Card>
           )}
         </div>
       </div>

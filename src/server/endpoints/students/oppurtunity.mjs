@@ -12,10 +12,10 @@ opportunitiesRouter.get("/:kerberos", async (req, res) => {
     }
     const opportunities = await Opportunity.find().populate({
       path: "creator",
-      select: "name",
+      select: "name kerberos",
     }).populate({
       path: "taker",
-      select: "name",
+      select: "name kerberos",
     });
     res.status(200).send(opportunities);
   } catch (e) {

@@ -71,8 +71,21 @@ const rows = [
   createData(12, "Nougat", 360, 19.0, 9, 37.0),
   createData(13, "Oreo", 437, 18.0, 63, 4.0),
 ];
-
 function descendingComparator(a, b, orderBy) {
+  if (orderBy === "raised_at") {
+    // Convert ISO date strings to Date objects for accurate comparison
+    const dateA = new Date(a[orderBy]);
+    const dateB = new Date(b[orderBy]);
+    if (dateB < dateA) {
+      return -1;
+    }
+    if (dateB > dateA) {
+      return 1;
+    }
+    return 0;
+  }
+
+  // Default comparison for other fields
   if (b[orderBy] < a[orderBy]) {
     return -1;
   }
@@ -124,7 +137,7 @@ const headCells = [
     label: "Mentor",
   },
   {
-    id: "raisedat",
+    id: "raised_at",
     numeric: true,
     disablePadding: false,
     label: "Raised At",
@@ -137,6 +150,7 @@ const headCells = [
   },
 ];
 
+// Inside EnhancedTableHead component
 function EnhancedTableHead(props) {
   const {
     onSelectAllClick,
@@ -146,6 +160,10 @@ function EnhancedTableHead(props) {
     rowCount,
     onRequestSort,
   } = props;
+
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
 
   return (
     <TableHead>
@@ -158,9 +176,18 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? "none" : "normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <Typography variant="h6" gutterBottom component="div">
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : "asc"}
+              onClick={createSortHandler(headCell.id)}
+            >
               {headCell.label}
-            </Typography>
+              {orderBy === headCell.id ? (
+                <Box component="span" sx={visuallyHidden}>
+                  {order === "desc" ? "sorted descending" : "sorted ascending"}
+                </Box>
+              ) : null}
+            </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -168,6 +195,7 @@ function EnhancedTableHead(props) {
   );
 }
 
+// EnhancedTableHead PropTypes
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -236,8 +264,35 @@ EnhancedTableToolbar.propTypes = {
 };
 
 function Row({ row, isItemSelected, labelId, mode, openDialog }) {
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString("en-GB"); // Format: DD/MM/YYYY
+    const formattedTime = date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }); // Format: HH:MM
+    return `${formattedDate} ${formattedTime}`;
+  };
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleStaus = (current_status) => {
+    if (current_status === "QUEUED") {
+      return "Yet to be Floated";
+    } else if (current_status === "TAKEN") {
+      return "Taken by a Mentor";
+    } else if (current_status === "RESOLVED") {
+      return "Resolved";
+    } else if (current_status === "REJECTED") {
+      return "Resolved";
+    } else if (current_status === "APPROVED") {
+      return "Resolved";
+    } else if (current_status === "DISMISSED") {
+      return "Dismissed by Mod";
+    } else if (current_status === "AVAILABLE") {
+      return "Floated to Mentor";
+    }
+  };
 
   const handledelete = async () => {
     // Display a loading toast and save the toast ID to update later
@@ -259,7 +314,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
           render: "Query deleted successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
 
         toast.warning("Please refresh the query list to see the changes");
@@ -270,7 +325,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
         render: "Error deleting query",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };
@@ -316,7 +371,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
             navigate("/student/view_queries/" + row._id);
           }}
         >
-          {row.status}
+          {handleStaus(row.status)}
         </TableCell>
         <TableCell
           align="right"
@@ -332,8 +387,7 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
             navigate("/student/view_queries/" + row._id);
           }}
         >
-          {/* {row.raised_at} */}
-          {formatTimestamp(row.raised_at)}
+          {formatDateTime(row.raised_at)}
         </TableCell>
         <TableCell
           align="right"
@@ -379,7 +433,6 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
                 </Button>
               </Box>
             ) : null}
-            {console.log(row)}
             <Box sx={{ margin: 1, display: "flex", flexDirection: "row" }}>
               <Box sx={{ margin: 2 }}>
                 <Typography
@@ -403,7 +456,6 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
                 </Typography>
                 {row.attachments.length !== 0 && (
                   <Box position="relative" display="inline-block">
-                    {console.log(row.attachments)}
                     {row.attachments.map((attachment, index) => (
                       <img
                         key={index}
@@ -461,13 +513,19 @@ function Row({ row, isItemSelected, labelId, mode, openDialog }) {
 }
 
 export default function Querylist({ mode, data }) {
-  const [order, setOrder] = useState("asc");
-  const [orderBy, setOrderBy] = useState("calories");
+  const [order, setOrder] = useState("desc"); // Default sorting order
+  const [orderBy, setOrderBy] = useState("raised_at"); // Default sorting by Raised At
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [open, setOpen] = useState(false);
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -480,9 +538,13 @@ export default function Querylist({ mode, data }) {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
+  // Sorting the rows
+  const sortedRows = stableSort(data, getComparator(order, orderBy));
+
   const visibleRows = React.useMemo(
-    () => data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [page, rowsPerPage, data]
+    () =>
+      sortedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [page, rowsPerPage, sortedRows]
   );
 
   return (
@@ -506,7 +568,7 @@ export default function Querylist({ mode, data }) {
               order={order}
               orderBy={orderBy}
               onSelectAllClick={() => {}}
-              onRequestSort={() => {}}
+              onRequestSort={handleRequestSort}
               rowCount={data.length}
             />
             <TableBody>

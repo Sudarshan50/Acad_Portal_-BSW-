@@ -66,7 +66,7 @@ export default function JoySignInSideTemplate() {
           render: "Please verify your account to login",
           type: "error",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
         toast.warn("Please check your webmail to verify your account 📧");
       } else if (res.data.status === "verified") {

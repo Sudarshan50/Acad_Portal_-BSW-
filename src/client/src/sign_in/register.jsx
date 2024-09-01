@@ -67,7 +67,7 @@ export default function JoyRegisterSideTemplate() {
           render: "Account created successfully!",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
 
         navigator("/");
@@ -78,7 +78,7 @@ export default function JoyRegisterSideTemplate() {
         render: err.response?.data?.message || "Something went wrong!",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
 
       console.log(err);

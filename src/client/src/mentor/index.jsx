@@ -8,6 +8,7 @@ import ViewQueries from "./ViewQuery";
 import StudentProfile from "./profile/StudentProfile";
 import Student from "./Student";
 import Cookies from "js-cookie";
+import { SimpleFooter } from "../components/Footer";
 
 export default function Mentor() {
   useEffect(() => {
@@ -17,18 +18,20 @@ export default function Mentor() {
     }
   }, []);
   return (
-    <Routes>
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/mark_attendance" element={<MarkAttendance />} />
-      <Route path="/float_opportunity" element={<FloatOpportunity />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/profile/students" element={<Student />} />
-      <Route path="/profile/student/:kerberos" element={<StudentProfile />} />
-      <Route path="/view_queries/:qid" element={<ViewQueries />} />
-      {/* <Route path="raise_queries" element={< />} /> */}
-      {/* <Route path="view_queries/:qid" element={< />} /> */}
-      {/* <Route path="query_feedback" element={<= />} /> */}
-      {/* <Route path="update_queries/:qid" element={<= />} /> */}
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/mark_attendance" element={<MarkAttendance />} />
+        <Route path="/float_opportunity" element={<FloatOpportunity />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/student/:kerberos" element={<StudentProfile />} />
+        <Route path="/view_queries/:qid" element={<ViewQueries />} />
+        {/* <Route path="raise_queries" element={< />} /> */}
+        {/* <Route path="view_queries/:qid" element={< />} /> */}
+        {/* <Route path="query_feedback" element={<= />} /> */}
+        {/* <Route path="update_queries/:qid" element={<= />} /> */}
+      </Routes>
+      <SimpleFooter />
+    </>
   );
 }

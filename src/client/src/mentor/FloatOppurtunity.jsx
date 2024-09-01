@@ -57,14 +57,14 @@ const FloatOpportunity = () => {
           render: "Opportunity floated successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
       } else {
         toast.update(toastId, {
           render: "Check the details entered",
           type: "warning",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
       }
     } catch (err) {
@@ -73,7 +73,7 @@ const FloatOpportunity = () => {
         render: "Error in floating opportunity",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };

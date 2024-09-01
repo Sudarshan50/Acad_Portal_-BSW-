@@ -69,7 +69,7 @@ export default function JoySignInSideTemplate() {
           render: "Logged in successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
 
         Cookies.set("auth_token", res.data.token, {
@@ -92,7 +92,7 @@ export default function JoySignInSideTemplate() {
         render: "Invalid credentials",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };
@@ -180,7 +180,7 @@ export default function JoySignInSideTemplate() {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography component="h1" level="h3">
-                  Sign in
+                  Sign in (For Moderators Only)
                 </Typography>
                 {/* <Typography level="body-sm">
                   New to company?{' '}

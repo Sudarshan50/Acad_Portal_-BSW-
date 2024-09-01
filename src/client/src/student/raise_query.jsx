@@ -104,7 +104,7 @@ const QueryForm = () => {
           render: "Query submitted successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
 
         nav("/student");
@@ -115,7 +115,7 @@ const QueryForm = () => {
         render: err.response?.data?.message || "Failed to submit query",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };
@@ -174,9 +174,6 @@ const QueryForm = () => {
                 <Button variant="contained" component="span">
                   Upload
                 </Button>
-                <p className="mt-1 mb-1" style={{ color: "red" }}>
-                  Only image files are accepted at max 5!{" "}
-                </p>
               </label>
               {attachments.length > 0 && (
                 <Box ml={2} display="flex" flexWrap="wrap">
@@ -190,6 +187,9 @@ const QueryForm = () => {
                 </Box>
               )}
             </Box>
+            <div style={{ display: "flex", color: "red", fontWeight: "bold" }}>
+              File Upload Limit is 10mb, at max 5 files.
+            </div>
           </Box>
           <Button variant="contained" color="primary" type="submit" fullWidth>
             Submit

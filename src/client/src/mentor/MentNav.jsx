@@ -200,11 +200,7 @@ function NavListMenu() {
 
 // nav list component
 const navListItems = [
-  {
-    label: "Students",
-    icon: UserCircleIcon,
-    href: "profile/students",
-  },
+  
 ];
 
 function NavList() {

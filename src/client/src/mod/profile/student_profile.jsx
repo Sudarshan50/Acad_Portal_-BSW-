@@ -29,7 +29,7 @@ const StudentProf = () => {
           }
         );
         if (res.status === 200) {
-            setStud(res.data);
+          setStud(res.data);
         }
       } catch (error) {
         console.error("Error fetching mentor data:", error);
@@ -78,6 +78,13 @@ const StudentProf = () => {
           <h2 className="text-2xl font-semibold relative left-80 mb-2">
             {stud.name}
           </h2>
+          <Typography
+            variant="body1"
+            style={{ fontWeight: "bold" }}
+            className= "text-green-500"
+          >
+            Role: Student
+          </Typography>
           <p>Phone Number: {stud.phone_number}</p>
           <p>Email: {`${stud.kerberos}@iitd.ac.in`}</p>
           <p>Asked Queries: {stud.queries?.length}</p>

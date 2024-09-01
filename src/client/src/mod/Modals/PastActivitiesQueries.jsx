@@ -6,8 +6,10 @@ import {
   rejectResolved,
 } from "../utils/modActionHandler";
 import formatTimestamp from "../../components/time_formatter";
+import { useNavigate } from "react-router-dom";
 
 const PastActivitiesDismissQuery = (props) => {
+  const navigate = useNavigate();
   const [hours, setHours] = useState(0);
   const handleApprove = (id) => {
     handleApproveQuery(id);
@@ -31,7 +33,16 @@ const PastActivitiesDismissQuery = (props) => {
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Paper sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600,maxHeight: 800 ,overflow:"scroll" }}>
+      <Paper
+        sx={{
+          p: 4,
+          mx: "auto",
+          mt: 8,
+          maxWidth: 600,
+          maxHeight: 800,
+          overflow: "scroll",
+        }}
+      >
         {props?.sItem && (
           <>
             <Typography id="modal-title" variant="h6" component="h2">
@@ -40,12 +51,43 @@ const PastActivitiesDismissQuery = (props) => {
             <Typography id="modal-description" sx={{ mt: 2 }}>
               Status: {props.sItem?.status}
             </Typography>
+            <Typography id="modal-description" sx={{ mt: 2 }}>
+              Queried By: {props.sItem?.student.name} (
+              {(props.sItem?.student.kerberos).toUpperCase()})
+              <Button
+                style={{ marginLeft: "1em" }}
+                color="info"
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  navigate(
+                    `/mod/profile/student/${props.sItem?.student?.kerberos}`
+                  );
+                }}
+              >
+                View Profile
+              </Button>
+            </Typography>
             {props.sItem?.status === "RESOLVED" ||
             props.sItem?.status === "REJECTED" ||
             props.sItem.status === "APPROVED" ? (
               <Box mt={2}>
                 <Typography id="modal-description" sx={{ mt: 2 }}>
-                  Mentor: {props.sItem?.mentor_name}
+                  Mentor: {props.sItem?.mentor_name} (
+                  {props.sItem?.mentor.kerberos?.toUpperCase()})
+                  <Button
+                    style={{ marginLeft: "1em" }}
+                    color="info"
+                    variant="contained"
+                    size="small"
+                    onClick={() => {
+                      navigate(
+                        `/mod/profile/mentor/${props.sItem?.mentor?.kerberos}`
+                      );
+                    }}
+                  >
+                    View Profile
+                  </Button>
                 </Typography>
                 <Typography id="modal-description" sx={{ mt: 2 }}>
                   Feedback: {props.sItem?.feedback}

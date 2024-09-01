@@ -21,10 +21,6 @@ queries_router.post("/:id", async (req, res) => {
       res.status(400).send("Query not found");
       return;
     }
-    // if(query.status!=='OPEN'){
-    //     res.status(400).send("Query already taken");
-    //     return;
-    // }
     query.status = "TAKEN";
     query.mentor = mentor._id;
     query.taken_at = Date.now();
@@ -32,6 +28,7 @@ queries_router.post("/:id", async (req, res) => {
     await query.save();
     res.status(200).send(query);
   } catch (e) {
+    console.log(e);
     res.status(500).send(e);
   }
 });

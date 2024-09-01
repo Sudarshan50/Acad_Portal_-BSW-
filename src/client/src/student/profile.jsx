@@ -69,7 +69,7 @@ const StudentProfile = ({ isMod }) => {
           render: "Profile updated successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
 
         setProfile({
@@ -83,7 +83,7 @@ const StudentProfile = ({ isMod }) => {
         render: "Error updating profile",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };
@@ -112,7 +112,7 @@ const StudentProfile = ({ isMod }) => {
           render: "Password changed successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
   
         setKey({
@@ -126,7 +126,7 @@ const StudentProfile = ({ isMod }) => {
         render: "Please check if the old password is correct",
         type: "warning",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };

@@ -4,8 +4,10 @@ import {
   handleApproveAttendance,
   handleRejectAttendance,
 } from "../utils/modActionHandler";
+import { useNavigate } from "react-router-dom";
 
 const PastActivityAttendace = (props) => {
+  const navigate = useNavigate();
   const [hours, setHours] = React.useState(0);
   const handleApprove = (id, hours) => {
     console.log(id, hours);
@@ -25,20 +27,44 @@ const PastActivityAttendace = (props) => {
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Paper sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600,maxHeight: 800 ,overflow:"scroll" }}>
+      <Paper
+        sx={{
+          p: 4,
+          mx: "auto",
+          mt: 8,
+          maxWidth: 600,
+          maxHeight: 800,
+          overflow: "scroll",
+        }}
+      >
         {props?.sItem && (
           <>
             <Typography id="modal-title" variant="h6" component="h2">
               {props.sItem?.description}
             </Typography>
-            <Typography id="modal-description" key = "new" sx={{ mt: 2 }}>
+            <Typography id="modal-description" key="new" sx={{ mt: 2 }}>
               Status: {props.sItem?.status}
             </Typography>
-            <Typography id="modal-name" key = "slow" sx={{ mt: 2 }}>
-              Mentor Name: {props.sItem?.mentor?.name}
+            <Typography id="modal-name" key="slow" sx={{ mt: 2 }}>
+              Mentor Name: {props.sItem?.mentor?.name} (
+              {props.sItem?.mentor?.kerberos?.toUpperCase()})
+              <Button
+                style={{ marginLeft: "1em" }}
+                color="info"
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  navigate(
+                    `/mod/profile/mentor/${props.sItem?.mentor?.kerberos}`
+                  );
+                }}
+              >
+                View Profile
+              </Button>
             </Typography>
-            <Typography id="modal-name" key = "slow" sx={{ mt: 2 }}>
-              Approved By (Mod Name): {props.sItem?.approved_by?.name}
+            <Typography id="modal-name" key="slow" sx={{ mt: 2 }}>
+              Approved By (Mod Name): {props.sItem?.approved_by?.name} (
+              {props.sItem?.approved_by?.kerberos?.toUpperCase()})
             </Typography>
             <Box mt={2}>
               <Typography id="modal-photo" sx={{ mt: 2 }}>
@@ -48,7 +74,11 @@ const PastActivityAttendace = (props) => {
                 <img
                   src={photo}
                   alt="photo"
-                  style={{ display:"inline-block" , height: "200px", width: "210px" }}
+                  style={{
+                    display: "inline-block",
+                    height: "200px",
+                    width: "210px",
+                  }}
                 />
               ))}
             </Box>

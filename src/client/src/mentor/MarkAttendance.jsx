@@ -23,15 +23,13 @@ const MarkAttendance = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const toastId = toast.loading("Please wait while we mark your attendance");
-  
+
     const formData = new FormData();
     formData.append("date", date);
     formData.append("description", discussion);
     formData.append("kerberos", Cookies.get("kerberos"));
     formData.append("photo", photo);
-  
-    console.log(date);
-  
+
     try {
       const res = await axios.post(
         "https://acadbackend-git-main-bswiitdelhi.vercel.app/api/mentor/attendance/post",
@@ -43,7 +41,7 @@ const MarkAttendance = () => {
           },
         }
       );
-  
+
       if (res.status === 200) {
         setDate("");
         setDiscussion("");
@@ -53,7 +51,7 @@ const MarkAttendance = () => {
           render: "Attendance marked successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
       }
     } catch (err) {
@@ -62,7 +60,7 @@ const MarkAttendance = () => {
         render: "Error in marking attendance",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };
@@ -108,6 +106,7 @@ const MarkAttendance = () => {
               <label htmlFor="photo" className="font-medium justify-center">
                 Photo of session*
               </label>
+
               <Input
                 type="file"
                 id="photo"
@@ -117,13 +116,26 @@ const MarkAttendance = () => {
                 className="w-full p-2 border rounded-md"
               />
             </div>
-
+            <div style={{display:"flex", color:"red",fontWeight:"bold"}}>Image size should be less than 10mb. </div>
             <Button
               type="submit"
-              color="blue"
-              ripple="light"
-              className="mt-4 w-full"
+              variant="gradient"
+              className="flex items-center gap-3"
             >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="h-5 w-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+                />
+              </svg>
               Submit
             </Button>
           </form>

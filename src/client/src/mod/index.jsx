@@ -8,6 +8,7 @@ import Profile from "./profile";
 import Students from "./student";
 import StudentProf from "./profile/student_profile";
 import Cookies from "js-cookie";
+import { SimpleFooter } from "../components/Footer";
 
 export default function Mod() {
   useEffect(()=>{
@@ -17,6 +18,7 @@ export default function Mod() {
     }
   },[])
   return (
+    <>
     <Routes>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="profile" element={<Profile />} />
@@ -26,5 +28,7 @@ export default function Mod() {
       <Route path="/profile/student/:kerberos" element={<StudentProf />} />
       <Route path="/" element={<Dashboard />} />
     </Routes>
+    <SimpleFooter />
+    </>
   );
 }

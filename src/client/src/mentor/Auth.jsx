@@ -63,14 +63,13 @@ export default function JoySignInSideTemplate() {
         data
       );
   
-      console.log(res);
   
       if (res.status === 200) {
         toast.update(toastId, {
           render: "Logged in successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
   
         Cookies.set("auth_token", res.data.token, {
@@ -90,7 +89,7 @@ export default function JoySignInSideTemplate() {
         render: "Invalid credentials",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };
@@ -178,47 +177,13 @@ export default function JoySignInSideTemplate() {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography component="h1" level="h3">
-                  Sign in
+                  Sign in (For Mentors Only)
                 </Typography>
-                {/* <Typography level="body-sm">
-                  New to company?{' '}
-                  <Link href="#replace-with-a-link" level="title-sm">
-                    Sign up!
-                  </Link>
-                </Typography> */}
               </Stack>
             </Stack>
             <Stack gap={4} sx={{ mt: 2 }}>
               <form
                 onSubmit={(e) => handleSubmit(e)}
-                // onSubmit={(event) => {
-                //   event.preventDefault();
-                //   const formElements = event.currentTarget.elements;
-                //   const data = {
-                //     kerberos: formElements.kerberos.value,
-                //     password: formElements.password.value,
-                //   };
-                //   fetch("https://acadbackend-git-main-bswiitdelhi.vercel.app/api/login",{
-                //     method: 'POST',
-                //     headers: {
-                //       'Content-Type': 'application/json',
-                //     },
-                //     body: JSON.stringify(data),
-                //   }).then((response) => {
-                //     if (response.ok) {
-                //       toast.success('Logged in successfully');
-                //       return response.json();
-                //     }
-                //     toast.error('Invalid credentials');
-                //   }).then((data) => {
-                //     Cookies.set('token', data.token, { expires: 1/24 });
-                //     Cookies.set('kerberos', formElements.kerberos.value, { expires: 1/24 });
-                //     navigator('../student');
-                //   }
-                //   ).catch((error) => {
-                //     console.error('There has been a problem with your fetch operation:', error);
-                //   });
-                // }}
               >
                 <FormControl required>
                   <FormLabel>Kerberos</FormLabel>

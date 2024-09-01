@@ -13,11 +13,14 @@ router.get("/:kerberos", async (req, res) => {
     const queries = await Query.find()
       .populate({
         path: "mentor",
-        select: "name",
+        select: "name kerberos",
       })
       .populate({
         path: "last_action_moderator",
-        select: "name",
+        select: "name kerberos",
+      }).populate({
+        path: 'student',
+        select: 'name kerberos'
       });
     res.status(200).send(queries);
   } catch (err) {

@@ -77,6 +77,13 @@ const MentorProfile = () => {
           <h2 className="text-2xl font-semibold relative left-40 mb-2">
             {mentor.name}
           </h2>
+          <Typography
+            variant="body1"
+            style={{ fontWeight: "bold" }}
+            className=" text-purple-500"
+          >
+            Role: Academic Mentor
+          </Typography>
           <p>Email: {`${mentor.kerberos}@iitd.ac.in`}</p>
           <p>Hours: {mentor.hours}</p>
           <p>Posted Opportunities: {mentor.opportunities?.length}</p>
@@ -94,17 +101,27 @@ const MentorProfile = () => {
           <List>
             {mentor.attendance?.map((item) => (
               <ListItem key={item._id}>
-                <p style={{overflow: "hidden",textOverflow:"ellipsis", marginRight:"2em"}}>{(item.description).substr(0,10)+ "...." }</p>
+                <p
+                  style={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    marginRight: "2em",
+                  }}
+                >
+                  {item.description.substr(0, 10) + "...."}
+                </p>
                 <p className="mr-1">Marked On: {formatTimestamp(item.date)}</p>
                 {item.hours > 0 ? (
                   <p
                     className="ml-2"
                     style={{ color: "green", fontWeight: "bold" }}
                   >
-                    Assigned Hours- {item?.hours} 
+                    Assigned Hours- {item?.hours}
                   </p>
                 ) : (
-                  <p className="ml-2" style={{color:"red"}}>AssignedHours- NILL</p>
+                  <p className="ml-2" style={{ color: "red" }}>
+                    AssignedHours- NILL
+                  </p>
                 )}
               </ListItem>
             ))}

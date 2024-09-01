@@ -59,7 +59,6 @@ const StudentDashboard = () => {
       })
       .then((responseData) => {
         setQueries(responseData);
-        console.log(responseData);
       })
       .catch((error) => {
         console.log(error);

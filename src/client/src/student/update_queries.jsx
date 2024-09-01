@@ -105,7 +105,7 @@ const QueryForm = () => {
           render: "Unauthorized access",
           type: "warning",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
         nav("/student");
       } else if (res.status === 200) {
@@ -113,7 +113,7 @@ const QueryForm = () => {
           render: "Query updated successfully",
           type: "success",
           isLoading: false,
-          autoClose: 5000,
+          autoClose:2000,
         });
         nav("/student");
       }
@@ -123,7 +123,7 @@ const QueryForm = () => {
         render: "Error updating query",
         type: "error",
         isLoading: false,
-        autoClose: 5000,
+        autoClose:2000,
       });
     }
   };

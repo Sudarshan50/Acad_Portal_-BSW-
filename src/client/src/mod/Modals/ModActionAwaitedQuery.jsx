@@ -6,8 +6,10 @@ import {
   approveResolved,
   rejectResolved,
 } from "../utils/modActionHandler";
+import { useNavigate } from "react-router-dom";
 
 const ModActionAwaitedQuery = (props) => {
+  const navigate = useNavigate();
   const [hours, setHours] = useState(0);
   const handleApprove = (id) => {
     handleApproveQuery(id);
@@ -36,14 +38,37 @@ const ModActionAwaitedQuery = (props) => {
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
     >
-      <Paper  sx={{ p: 4, mx: "auto", mt: 8, maxWidth: 600,maxHeight: 800 ,overflow:"scroll" }}>
+      <Paper
+        sx={{
+          p: 4,
+          mx: "auto",
+          mt: 8,
+          maxWidth: 600,
+          maxHeight: 800,
+          overflow: "scroll",
+        }}
+      >
         {props?.sItem && (
           <>
             <Typography id="modal-title" variant="h6" component="h2">
               {props.sItem?.description}
             </Typography>
             <Typography id="modal-description" sx={{ mt: 2 }}>
-              Queried by: {props.sItem?.student}
+              Queried by: {props.sItem?.student.name} (
+              {(props.sItem?.student.kerberos).toUpperCase()})
+              <Button
+                style={{ marginLeft: "1em" }}
+                color="info"
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  navigate(
+                    `/mod/profile/student/${props.sItem?.student?.kerberos}`
+                  );
+                }}
+              >
+                View Profile
+              </Button>
             </Typography>
             <Typography id="modal-description" sx={{ mt: 2 }}>
               Status: {props.sItem?.status}
@@ -54,7 +79,21 @@ const ModActionAwaitedQuery = (props) => {
                   Feedback: {props.sItem?.feedback}
                 </Typography>
                 <Typography id="modal-description" sx={{ mt: 2 }}>
-                  Resolved By: {props.sItem?.mentor_name}
+                  Resolved By: {props.sItem?.mentor_name} (
+                  {(props.sItem?.mentor.kerberos).toUpperCase()})
+                  <Button
+                    style={{ marginLeft: "1em" }}
+                    color="info"
+                    variant="contained"
+                    size="small"
+                    onClick={() => {
+                      navigate(
+                        `/mod/profile/mentor/${props.sItem?.student?.kerberos}`
+                      );
+                    }}
+                  >
+                    View Profile
+                  </Button>
                 </Typography>
               </>
             )}
